@@ -9,6 +9,8 @@ class Message {
   String childName;
   Gender childgender;
   String senderName;
+  bool isSaved;
+
 
   Message(
       {required this.id,
@@ -16,5 +18,6 @@ class Message {
       required this.message,
       required this.date,
       required this.senderName,
-      required this.childgender});
+      required this.childgender,
+      required this.isSaved});
 }
