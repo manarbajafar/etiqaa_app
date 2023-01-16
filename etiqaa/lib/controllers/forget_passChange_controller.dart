@@ -34,6 +34,6 @@ class ForgetPassChangeControllerImp extends ForgetPassChangeController {
 
   @override
   toforgetPassSuccessSc() {
-    Get.offAll(() => forgetPassSuccessSc());
+    Get.to(() => forgetPassSuccessSc());
   }
 }

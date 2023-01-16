@@ -19,7 +19,7 @@ class ChooseChildSc extends StatefulWidget {
 class _ChooseChildSc extends State<ChooseChildSc> {
   ChildUncompleteController controller = Get.put(ChildUncompleteController());
 
-  late int childrenNum;
+  int childrenNum = 0;
 
   Crud _crud = Crud();
 
@@ -118,6 +118,7 @@ class _ChooseChildSc extends State<ChooseChildSc> {
                     physics: NeverScrollableScrollPhysics(),
                     itemCount: snap!.length,
                     itemBuilder: (BuildContext context, index) {
+                      childrenNum = snap.length;
                       if ('${snap[index]['parent_id']}' ==
                           sharedPref.getString('parent_id')) {
                         return InkWell(
@@ -147,6 +148,21 @@ class _ChooseChildSc extends State<ChooseChildSc> {
                   );
                 },
               ),
+              childrenNum == 0
+                  ? Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 30.h, horizontal: 0.h),
+                      child: Text(
+                        "لا يوجد لديك اطفال يحتاجون تنشيط",
+                        style: TextStyle(
+                          color: Colors.redAccent,
+                          fontSize: 25.sp,
+                          fontFamily: 'FFHekaya',
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    )
+                  : Center()
             ],
           ),
         ),

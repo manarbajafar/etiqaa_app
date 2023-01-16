@@ -35,7 +35,7 @@ class ConfrmationControllerImp extends ConfrmationController {
   }
 
   @override
-  toSuccessCASc() => Get.offAll(SuccessCASc());
+  toSuccessCASc() => Get.to(SuccessCASc());
 
   @override
   toforgetPassChange() =>

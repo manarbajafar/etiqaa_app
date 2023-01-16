@@ -45,7 +45,7 @@ class LogInControllerImp extends LogInController {
 
   @override
   toHomePage() {
-    Get.to(HomePage());
+    Get.offAll(HomePage());
   }
 
   @override
