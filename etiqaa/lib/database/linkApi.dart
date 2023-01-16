@@ -26,3 +26,12 @@ const String linkactivateChild = "$linkServerName/etiqaa_php/activateChild.php";
 const String linkStoreMsg = "$linkServerName/etiqaa_php/storeMsg.php";
 const String linkGetMsg = "$linkServerName/etiqaa_php/getMsg.php";
 const String linkUpdateLabel = "$linkServerName/etiqaa_php/updateLabel.php";
+const String linkWhatsAppMessages =
+    "$linkServerName/etiqaa_php/whatsAppMessages.php";
+const String linkAllMessages = "$linkServerName/etiqaa_php/allMessages.php";
+const String linkChild = "$linkServerName/etiqaa_php/child.php";
+const String linkSaveMessage = "$linkServerName/etiqaa_php/saveMessage.php";
+const String linkChildMessages = "$linkServerName/etiqaa_php/childMessages.php";
+const String linkdeleteMessages =
+    "$linkServerName/etiqaa_php/deleteMessage.php";
+const String linkAlertHistory = "$linkServerName/etiqaa_php/alertHistory.php";
