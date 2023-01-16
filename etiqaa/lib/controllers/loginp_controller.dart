@@ -45,7 +45,10 @@ class LogInControllerImp extends LogInController {
 
   @override
   toHomePage() {
-    Get.offAll(HomePage());
+    if (sharedPref.getInt('childrenNum') == 0) {
+      Get.offAll(Welcoming());
+    } else
+      Get.offAll(HomePage());
   }
 
   @override
