@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:etiqaa/database/crud.dart';
 import 'package:etiqaa/main.dart';
+import 'package:etiqaa/screens/homepage.dart';
+import 'package:etiqaa/widgets/viewMessages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../database/linkApi.dart';
@@ -16,29 +20,7 @@ class MessagesCards extends StatefulWidget {
   State<MessagesCards> createState() => _MessagesCardsState();
 }
 
-List<Message> messageList = [
-  Message(
-      id: 1,
-      childName: 'سارة',
-      childgender: Gender.Girl,
-      message: 'غبية وقذرة',
-      date: '2022-10-07 10:30',
-      senderName: 'ريم محمد'),
-  Message(
-      id: 2,
-      childName: 'سارة',
-      childgender: Gender.Girl,
-      message: 'لاتقول لامك',
-      date: '2022-10-06 10:00',
-      senderName: 'ريم محمد'),
-  Message(
-      id: 3,
-      childName: 'عمر',
-      childgender: Gender.Boy,
-      message: 'اطعنك',
-      date: '2022-10-06 10:00',
-      senderName: 'ريم محمد'),
-];
+List<Message> messageList = [];
 int index = 0;
 
 List<Child> childrenlist = [
@@ -64,57 +46,109 @@ List<Child> childrenlist = [
 
 class _MessagesCardsState extends State<MessagesCards>
     with TickerProviderStateMixin {
-  late int childrenNum;
-
+  int? childrenNum = sharedPref.getInt('childrenNum');
   void initState() {
-    childrenNum = 0;
-    childrenList();
+    setState(() {
+      tablist();
+      messages();
+    });
     super.initState();
   }
 
+  Gender getGender(String gender) {
+    switch (gender) {
+      case 'ذكر':
+        return Gender.Boy;
+      case 'أنثى':
+        return Gender.Girl;
+      default:
+        return Gender.Boy;
+    }
+  }
+
   Crud _crud = Crud();
-  late List snap;
-  childrenList() async {
-    snap = await _crud.getRequest(linkChildrenList);
-    for (int i = 0; i < snap.length; i++) {
-      if (snap[i]['parent_id'].toString() ==
+
+  List msgid = [];
+  int msgSaved = 0;
+  List msgchild = [];
+  bool msg = false;
+  messages() async {
+    List response = await _crud.getRequest(linkAllMessages);
+    for (int i = 0; i < response.length; i++) {
+      if (response[i]['parent_id'].toString() ==
           sharedPref.getString('parent_id')) {
-        childrenNum++;
+        msgid.add(response[i]['msg_id']);
+        msgchild.add(response[i]['child_name']);
+        msg = true;
+      } else {}
+    }
+    if (msg == true) {
+      setState(() {
+        allMessages();
+      });
+    }
+  }
+
+  int msgNumber = 0;
+  allMessages() async {
+    msg = true;
+    print('${msgid.length} hi');
+    for (int i = 0; i < msgid.length; i++) {
+      print('HI HI HI');
+      var response = await _crud.postRequest2(linkWhatsAppMessages, {
+        'msg_id': msgid[i],
+      });
+      print(response.toString());
+      if (response != null && response[0]["statues"] == "success") {
+        var responseChild = await _crud.postRequest2(linkChild, {
+          'child_name': msgchild[i].toString(),
+          'parent_id': sharedPref.getString('parent_id'),
+        });
+        print(responseChild.toString());
+        if (responseChild != null && responseChild[0]['statues'] == "success") {
+          // AsyncSnapshot snap = responseChild;
+          print(response.toString());
+          // response = jsonEncode(response.toString());
+          print(responseChild[0]['gender']);
+          messageList.add(
+            Message(
+                id: int.parse(msgid[i]),
+                childName: msgchild[i],
+                childgender: getGender(responseChild[0]['gender']),
+                message: response[0]['content'],
+                date: response[0]['date_time'].toString(),
+                senderName: response[0]['sender'],
+                isSaved: false),
+          );
+          msgNumber++;
+        } else {
+          print('Child fail');
+        }
+      } else {
+        msgSaved++;
+        print('Msg fail');
       }
     }
-    sharedPref.setInt('childrenNum', childrenNum);
-    print(sharedPref.getInt('childrenNum'));
+    print(msgSaved);
+    print('how');
+  }
+
+  List children = [];
+  List tabList = [];
+  tablist() async {
+    List response = await _crud.getRequest(linkChildrenList);
+    for (int i = 0; i < response.length; i++) {
+      if (response[i]['parent_id'] == sharedPref.getString('parent_id')) {
+        children.add(
+          '${response[i]['child_name']}',
+        );
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    List tabList = [
-      Tab(
-          child: Text(
-        'الكل',
-        style: Theme.of(context).textTheme.headline5,
-      )),
-      Tab(
-        child: Text(
-          '${childrenlist[0].name}',
-          style: Theme.of(context).textTheme.headline5,
-        ),
-      ),
-      Tab(
-        child: Text(
-          '${childrenlist[1].name}',
-          style: Theme.of(context).textTheme.headline5,
-        ),
-      ),
-      // Tab(
-      //   child: Text(
-      //     '${childrenlist[2].name}',
-      //     style: Theme.of(context).textTheme.headline5,
-      //   ),
-      // ),
-    ];
-
-    TabController _tabController = TabController(length: 3, vsync: this);
+    TabController _tabController = TabController(length: 4, vsync: this);
     return Scaffold(
       body: Column(
         children: [
@@ -124,7 +158,7 @@ class _MessagesCardsState extends State<MessagesCards>
               Card(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12.r)),
-                elevation: 5.w,
+                elevation: 1.w,
                 child: Container(
                   decoration: BoxDecoration(
                       color: Colors.black.withOpacity(0.1),
@@ -136,16 +170,57 @@ class _MessagesCardsState extends State<MessagesCards>
                       ),
                       controller: _tabController,
                       isScrollable: true,
-                      labelPadding: EdgeInsets.symmetric(horizontal: 10.w),
+                      labelPadding: EdgeInsets.symmetric(horizontal: 3.w),
                       tabs: [
-                        tabList[0],
-                        tabList[1],
-                        tabList[2],
+                        Tab(
+                            child: Text(
+                          '   الكل   ',
+                          style: Theme.of(context).textTheme.headline5,
+                        )),
+                        children.length > 0
+                            ? Tab(
+                                child: Text(
+                                '${children[0]}',
+                                style: Theme.of(context).textTheme.headline5,
+                              ))
+                            : Tab(
+                                child: Text('',
+                                    style: TextStyle(
+                                      // Theme.of(context).textTheme.headline5,
+                                      backgroundColor:
+                                          Colors.black.withOpacity(0.1),
+                                    ))),
+                        children.length > 1
+                            ? Tab(
+                                child: Text(
+                                '${children[1]}',
+                                style: Theme.of(context).textTheme.headline5,
+                              ))
+                            : Tab(
+                                child: Text('',
+                                    style: TextStyle(
+                                      // Theme.of(context).textTheme.headline5,
+                                      backgroundColor:
+                                          Colors.black.withOpacity(0.1),
+                                    ))),
+                        children.length > 2
+                            ? Tab(
+                                child: Text(
+                                '${children[2]}',
+                                style: Theme.of(context).textTheme.headline5,
+                              ))
+                            : Tab(
+                                child: Text('',
+                                    style: TextStyle(
+                                      // Theme.of(context).textTheme.headline5,
+                                      backgroundColor:
+                                          Colors.black.withOpacity(0.1),
+                                    ))),
                       ]),
                 ),
               ),
               Container(
-                  child: childrenNum < 3
+                  child: childrenNum! < 3
                       ? InkWell(
                           onTap: () {},
                           child: InkWell(
@@ -173,378 +248,194 @@ class _MessagesCardsState extends State<MessagesCards>
                       : null),
             ],
           ),
-          Expanded(
-              child: TabBarView(
-            controller: _tabController,
-            children: [
-              Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 50.w),
-                    child: Align(
-                      alignment: Alignment.topRight,
+          msgid.length == msgSaved
+              ? Padding(
+                  padding: EdgeInsets.symmetric(vertical: 20.h),
+                  child: Center(
                       child: Text(
-                        'أحدث الرسائل',
-                        style: Theme.of(context).textTheme.headline5,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: ListView.builder(
-                      reverse: false,
-                      shrinkWrap: true,
-                      itemCount: 1,
-                      itemBuilder: ((context, index) {
-                        return Column(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 20.w, vertical: 10.h),
-                              child: SizedBox(
-                                height: 170.h,
-                                width: 280.w,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(40.r),
-                                  child: Card(
-                                      color: Color.fromRGBO(255, 255, 255, 1),
+                    'لايوجد رسائل',
+                    style: Theme.of(context).textTheme.headline1,
+                  )),
+                )
+              : Expanded(
+                  child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 50.w),
+                          child: Align(
+                            alignment: Alignment.topRight,
+                            child: Text(
+                              'أحدث الرسائل',
+                              style: Theme.of(context).textTheme.headline5,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: ListView.builder(
+                            reverse: false,
+                            shrinkWrap: true,
+                            itemCount: msgNumber,
+                            itemBuilder: ((context, index) {
+                              return Column(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 20.w, vertical: 10.h),
+                                    child: SizedBox(
+                                      height: 170.h,
+                                      width: 280.w,
                                       child: ClipRRect(
                                         borderRadius:
-                                            BorderRadius.circular(20.r),
-                                        child: Column(
-                                          children: [
-                                            Container(
-                                              height: 45.h,
-                                              color: Color.fromRGBO(
-                                                  237, 236, 242, 1),
-                                              child: Row(children: [
-                                                Padding(
-                                                  padding: EdgeInsets.symmetric(
-                                                    horizontal: 10.w,
+                                            BorderRadius.circular(40.r),
+                                        child: Card(
+                                            color: Color.fromRGBO(
+                                                255, 255, 255, 1),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(20.r),
+                                              child: Column(
+                                                children: [
+                                                  Container(
+                                                    height: 45.h,
+                                                    color: Color.fromRGBO(
+                                                        237, 236, 242, 1),
+                                                    child: Row(children: [
+                                                      Padding(
+                                                        padding: EdgeInsets
+                                                            .symmetric(
+                                                          horizontal: 10.w,
+                                                        ),
+                                                        child: messageList[
+                                                                        index]
+                                                                    .childgender ==
+                                                                Gender.Boy
+                                                            ? Image.asset(
+                                                                'images/boyIcon_c.png')
+                                                            : Image.asset(
+                                                                'images/girlIcon_c.png'),
+                                                      ),
+                                                      Padding(
+                                                        padding: EdgeInsets
+                                                            .symmetric(
+                                                                vertical: 2.h),
+                                                        child: Text(
+                                                          '${messageList[index].childName}',
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .headline1,
+                                                        ),
+                                                      )
+                                                    ]),
                                                   ),
-                                                  child: messageList[index]
-                                                              .childgender ==
-                                                          Gender.Boy
-                                                      ? Image.asset(
-                                                          'images/boyIcon_c.png')
-                                                      : Image.asset(
-                                                          'images/girlIcon_c.png'),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsets.symmetric(
-                                                      vertical: 2.h),
-                                                  child: Text(
-                                                    '${messageList[index].childName}',
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .headline1,
-                                                  ),
-                                                )
-                                              ]),
-                                            ),
-                                            Align(
-                                              alignment: Alignment.topRight,
-                                              child: Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 15.w),
-                                                child: Text(
-                                                  'العبارة',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .headline1,
-                                                ),
-                                              ),
-                                            ),
-                                            Align(
-                                              alignment: Alignment.topRight,
-                                              child: Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 15.w),
-                                                child: Text(
-                                                  '${messageList[index].message}',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .headline5,
-                                                ),
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 10.w),
-                                              child: Align(
-                                                alignment: Alignment.topLeft,
-                                                child: TextButton(
-                                                  onPressed: () {
-                                                    Get.off(AlertDetails(
-                                                        idList:
-                                                            messageList[index]
-                                                                .id));
-                                                  },
-                                                  child: Text(
-                                                    'المزيد',
-                                                    style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 15.sp,
-                                                      fontFamily: 'FFHekaya',
-                                                      decoration: TextDecoration
-                                                          .underline,
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.topRight,
+                                                    child: Padding(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 15.w),
+                                                      child: Text(
+                                                        'العبارة',
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .headline1,
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.topRight,
+                                                    child: Padding(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 15.w),
+                                                      child: Text(
+                                                        '${messageList[index].message}',
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .headline5,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 10.w),
+                                                    child: Align(
+                                                      alignment:
+                                                          Alignment.topLeft,
+                                                      child: TextButton(
+                                                        onPressed: () {
+                                                          Get.off(
+                                                            AlertDetails(
+                                                              name: messageList[
+                                                                      index]
+                                                                  .childName,
+                                                              date: messageList[
+                                                                      index]
+                                                                  .date,
+                                                              sender: messageList[
+                                                                      index]
+                                                                  .senderName,
+                                                              content:
+                                                                  messageList[
+                                                                          index]
+                                                                      .message,
+                                                              gender: (messageList[
+                                                                      index]
+                                                                  .childgender),
+                                                              isSaved:
+                                                                  messageList[
+                                                                          index]
+                                                                      .isSaved,
+                                                              id: messageList[
+                                                                      index]
+                                                                  .id,
+                                                            ),
+                                                          );
+                                                        },
+                                                        child: Text(
+                                                          'المزيد',
+                                                          style: TextStyle(
+                                                            color: Colors.black,
+                                                            fontSize: 15.sp,
+                                                            fontFamily:
+                                                                'FFHekaya',
+                                                            decoration:
+                                                                TextDecoration
+                                                                    .underline,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
                                               ),
-                                            )
-                                          ],
-                                        ),
-                                      )),
-                                ),
-                              ),
-                            ),
-                          ],
-                        );
-                      }),
+                                            )),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
-              Column(
-                children: [
-                  // Expanded(
-                  //   flex: 1,
-                  //   child: ListView.builder(
-                  //     reverse: false,
-                  //     shrinkWrap: true,
-                  //     itemCount: 2,
-                  //     itemBuilder: ((context, index) {
-                  //       return Column(
-                  //         children: [
-                  //           Padding(
-                  //             padding: EdgeInsets.symmetric(
-                  //                 horizontal: 20.w, vertical: 10.h),
-                  //             child: SizedBox(
-                  //               height: 170.h,
-                  //               width: 280.w,
-                  //               child: ClipRRect(
-                  //                 borderRadius: BorderRadius.circular(40.r),
-                  //                 child: Card(
-                  //                     color: Color.fromRGBO(255, 255, 255, 1),
-                  //                     child: ClipRRect(
-                  //                       borderRadius:
-                  //                           BorderRadius.circular(40.r),
-                  //                       child: Column(
-                  //                         children: [
-                  //                           Container(
-                  //                             height: 45.h,
-                  //                             color: Color.fromRGBO(
-                  //                                 237, 236, 242, 1),
-                  //                             child: Row(children: [
-                  //                               Padding(
-                  //                                 padding: EdgeInsets.symmetric(
-                  //                                   horizontal: 10.w,
-                  //                                 ),
-                  //                                 child: messageList[index]
-                  //                                             .childgender ==
-                  //                                         Gender.Boy
-                  //                                     ? Image.asset(
-                  //                                         'images/boyIcon_c.png')
-                  //                                     : Image.asset(
-                  //                                         'images/girlIcon_c.png'),
-                  //                               ),
-                  //                               Padding(
-                  //                                 padding: EdgeInsets.symmetric(
-                  //                                     vertical: 2.h),
-                  //                                 child: Text(
-                  //                                   '${messageList[index].childName}',
-                  //                                   style: Theme.of(context)
-                  //                                       .textTheme
-                  //                                       .headline1,
-                  //                                 ),
-                  //                               )
-                  //                             ]),
-                  //                           ),
-                  //                           Align(
-                  //                             alignment: Alignment.topRight,
-                  //                             child: Padding(
-                  //                               padding: EdgeInsets.symmetric(
-                  //                                   horizontal: 15.w),
-                  //                               child: Text(
-                  //                                 'العبارة',
-                  //                                 style: Theme.of(context)
-                  //                                     .textTheme
-                  //                                     .headline1,
-                  //                               ),
-                  //                             ),
-                  //                           ),
-                  //                           Align(
-                  //                             alignment: Alignment.topRight,
-                  //                             child: Padding(
-                  //                               padding: EdgeInsets.symmetric(
-                  //                                   horizontal: 15.w),
-                  //                               child: Text(
-                  //                                 '${messageList[index].message}',
-                  //                                 style: Theme.of(context)
-                  //                                     .textTheme
-                  //                                     .headline5,
-                  //                               ),
-                  //                             ),
-                  //                           ),
-                  //                           Padding(
-                  //                             padding: EdgeInsets.symmetric(
-                  //                                 horizontal: 15.w),
-                  //                             child: Align(
-                  //                               alignment: Alignment.topLeft,
-                  //                               child: TextButton(
-                  //                                 onPressed: () {
-                  //                                   Get.off(AlertDetails(
-                  //                                       idList:
-                  //                                           messageList[index]
-                  //                                               .id));
-                  //                                 },
-                  //                                 child: Text(
-                  //                                   'المزيد',
-                  //                                   style: TextStyle(
-                  //                                     color: Colors.black,
-                  //                                     fontSize: 15.sp,
-                  //                                     fontFamily: 'FFHekaya',
-                  //                                     decoration: TextDecoration
-                  //                                         .underline,
-                  //                                   ),
-                  //                                 ),
-                  //                               ),
-                  //                             ),
-                  //                           )
-                  //                         ],
-                  //                       ),
-                  //                     )),
-                  //               ),
-                  //             ),
-                  //           ),
-                  //         ],
-                  //       );
-                  //     }),
-                  //   ),
-                  // ),
-                ],
-              ),
-              Column(
-                children: [
-                  // Expanded(
-                  //   flex: 1,
-                  //   child: ListView.builder(
-                  //     reverse: false,
-                  //     shrinkWrap: true,
-                  //     itemCount: 1,
-                  //     itemBuilder: ((context, index) {
-                  //       return Column(
-                  //         children: [
-                  //           Padding(
-                  //             padding: EdgeInsets.symmetric(
-                  //                 horizontal: 20.w, vertical: 10.h),
-                  //             child: SizedBox(
-                  //               height: 170.h,
-                  //               width: 280.w,
-                  //               child: ClipRRect(
-                  //                 borderRadius: BorderRadius.circular(40.r),
-                  //                 child: Card(
-                  //                     color: Color.fromRGBO(255, 255, 255, 1),
-                  //                     child: ClipRRect(
-                  //                       borderRadius: BorderRadius.circular(20),
-                  //                       child: Column(
-                  //                         children: [
-                  //                           Container(
-                  //                             height: 45.h,
-                  //                             color: Color.fromRGBO(
-                  //                                 237, 236, 242, 1),
-                  //                             child: Row(children: [
-                  //                               Padding(
-                  //                                 padding: EdgeInsets.symmetric(
-                  //                                   horizontal: 10.w,
-                  //                                 ),
-                  //                                 child: messageList[index]
-                  //                                             .childgender ==
-                  //                                         Gender.Boy
-                  //                                     ? Image.asset(
-                  //                                         'images/boyIcon_c.png')
-                  //                                     : Image.asset(
-                  //                                         'images/girlIcon_c.png'),
-                  //                               ),
-                  //                               Padding(
-                  //                                 padding: EdgeInsets.symmetric(
-                  //                                     vertical: 2.h),
-                  //                                 child: Text(
-                  //                                   '${messageList[index].childName}',
-                  //                                   style: Theme.of(context)
-                  //                                       .textTheme
-                  //                                       .headline1,
-                  //                                 ),
-                  //                               )
-                  //                             ]),
-                  //                           ),
-                  //                           Align(
-                  //                             alignment: Alignment.topRight,
-                  //                             child: Padding(
-                  //                               padding: EdgeInsets.symmetric(
-                  //                                   horizontal: 15.w),
-                  //                               child: Text(
-                  //                                 'العبارة',
-                  //                                 style: Theme.of(context)
-                  //                                     .textTheme
-                  //                                     .headline1,
-                  //                               ),
-                  //                             ),
-                  //                           ),
-                  //                           Align(
-                  //                             alignment: Alignment.topRight,
-                  //                             child: Padding(
-                  //                               padding: EdgeInsets.symmetric(
-                  //                                   horizontal: 15.w),
-                  //                               child: Text(
-                  //                                 '${messageList[index].message}',
-                  //                                 style: Theme.of(context)
-                  //                                     .textTheme
-                  //                                     .headline5,
-                  //                               ),
-                  //                             ),
-                  //                           ),
-                  //                           Padding(
-                  //                             padding: EdgeInsets.symmetric(
-                  //                                 horizontal: 10.w),
-                  //                             child: Align(
-                  //                               alignment: Alignment.topLeft,
-                  //                               child: TextButton(
-                  //                                 onPressed: () {
-                  //                                   Get.off(AlertDetails(
-                  //                                       idList:
-                  //                                           messageList[index]
-                  //                                               .id));
-                  //                                 },
-                  //                                 child: Text(
-                  //                                   'المزيد',
-                  //                                   style: TextStyle(
-                  //                                     color: Colors.black,
-                  //                                     fontSize: 15.sp,
-                  //                                     fontFamily: 'FFHekaya',
-                  //                                     decoration: TextDecoration
-                  //                                         .underline,
-                  //                                   ),
-                  //                                 ),
-                  //                               ),
-                  //                             ),
-                  //                           )
-                  //                         ],
-                  //                       ),
-                  //                     )),
-                  //               ),
-                  //             ),
-                  //           ),
-                  //         ],
-                  //       );
-                  //     }),
-                  //   ),
-                  // ),
-                ],
-              ),
-            ],
-          ))
+                    Column(children: []),
+                    Column(
+                      children: [],
+                    ),
+                    Column(
+                      children: [],
+                    ),
+                  ],
+                ))
         ],
       ),
     );
