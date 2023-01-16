@@ -154,7 +154,7 @@ class _ChildAccountState extends State<ChildAccount> with Crud {
               ),
             ),
             Text(
-                !childInfo.isActivated
+                 widget.isActive == '0'
                     ? 'لم يتم إنهاء إجراءات هذا الطفل \nقم بربط الطفل بجهازه'
                     : '',
                 textAlign: TextAlign.center,
