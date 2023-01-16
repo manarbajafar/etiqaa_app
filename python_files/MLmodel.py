@@ -13,6 +13,9 @@ from flask import Flask,jsonify,request
 from flask_cors import CORS
 import json
 
+
+
+
 app = Flask(__name__) #intance of our flask application 
 
 
@@ -70,46 +73,37 @@ result = ''
 
 
 #Route '/' to facilitate get request from our flutter app
-@app.route('/', methods = ['GET', 'POST'])
+@app.route('/', methods = ['POST'])
+
 def index():
 
-  #fetching the global response variable to manipulate inside the function
-  global result
+  # import trained vectorizer and model
+  vectorizer = pickle.load(open(relativePath("LemCountVectorizer.pickle"), "rb")) # rb stand for read binary
+  model = pickle.load(open(relativePath("LR_LemModelWithSW_81,2.pickle"), "rb"))
 
-  #checking the request type we get from the app
-  if(request.method == 'POST'):
 
-    # import trained vectorizer and model
-    vectorizer = pickle.load(open(relativePath("LemCountVectorizer.pickle"), "rb")) # rb stand for read binary
-    model = pickle.load(open(relativePath("LR_LemModelWithSW_81,2.pickle"), "rb"))
 
-  # 
-    request_data = request.data #getting the response data
-    request_data = json.loads(request_data.decode('utf-8')) #converting it from json to key value pair
-    text = request_data['message'] #assigning it to name
-    
-  #
+  request_data = request.data #getting the response data
+  request_data = json.loads(request_data.decode('utf-8')) #converting it from json to key value pair
+  text = request_data['message'] #assigning it to name
+ 
 
-    cleanedText = cleaning(text)
-    print(cleanedText)
+  cleanedText = cleaning(text)
+  print(cleanedText)
    
 
-    processedText = [ANLP(cleanedText)]
-    print(processedText)
+  processedText = [ANLP(cleanedText)]
+  print(processedText)
 
-    featuredText = vectorizer.transform(processedText)
+  featuredText = vectorizer.transform(processedText)
+  predictedClass = model.predict(featuredText)
+  print(predictedClass)
+  print(type(predictedClass))
 
-    predictedClass = model.predict(featuredText)
-    print(predictedClass)
-    print(type(predictedClass))
+  result = str(predictedClass[0])
 
-    result = str(predictedClass[0])
-    
-    return " " #to avoid a type error
-   
+  return jsonify({'message' : result}) #returning key-value pair in json format
 
-  else:
-    return jsonify({'message' : result}) #returning key-value pair in json format
 
 
 if __name__ == "__main__":

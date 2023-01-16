@@ -36,10 +36,10 @@ class ChildUncompleteController extends GetxController {
   // we must use static method, to handle in background
   static void _callback(NotificationEvent evt) {
     // HANDLING BACKGROUND NOTIFICATIONS :
-    print('GETTING INFO ');
-    print(evt.packageName); // PACKAGE USE TO SEND MESSAGE :
-    print(evt.text); // MESSAGE CONTENT  :
-    print(evt.title); //SENDER NUMBER: OR HEADER
+    // print('GETTING INFO ');
+    // print(evt.packageName); // PACKAGE USE TO SEND MESSAGE :
+    // print(evt.text); // MESSAGE CONTENT  :
+    // print(evt.title); //SENDER NUMBER: OR HEADER
 
     final SendPort? send = IsolateNameServer.lookupPortByName("_listener_");
     if (send == null) print("can't find the sender");
@@ -73,16 +73,14 @@ class ChildUncompleteController extends GetxController {
       // TODO: fix bug
       // NotificationsListener.promoteToForeground("");
     }
-    print('GETTING INFO FRONT APP ');
-    print(event.packageName); // PACKAGE USE TO SEND MESSAGE :
-    print(event.text); // MESSAGE CONTENT  :
-    print(event.title); //SENDER NUMBER: OR HEADER
+    // print('GETTING INFO FRONT APP ');
+    // print(event.packageName); // PACKAGE USE TO SEND MESSAGE :
+    // print(event.text); // MESSAGE CONTENT  :
+    // print(event.title); //SENDER NUMBER: OR HEADER
+
     if (event.packageName == 'kik.android') {
       //whatsapp.android
-      print("before sendMsgToModel: ${event.text.toString()}");
-      sendMsgToModel(event.text.toString());
-
-      String label = await getMsgLabel();
+      String label = await getMsgLabel(event.text.toString());
       print("after getMsgLabel(): ${label}");
 
       if (label == 'NOT_APROP') {
@@ -131,31 +129,19 @@ class ChildUncompleteController extends GetxController {
     update();
   }
 
-  void sendMsgToModel(String text) async {
-    // text = 'سُدي حلقك لا اذبحك4 !! 🪒 بيدي،تشوف كيف';
-    // text = 'السلام عليكم كيفك !! 🪒 #';
+  Future<String> getMsgLabel(String text) async {
     //url to send the post request to
     final url = 'http://192.168.8.102:5000/';
-    print(text);
+    // print(text);
     //sending a post request to the url
     final response =
         await http.post(Uri.parse(url), body: json.encode({'message': text}));
-  }
-
-  Future<String> getMsgLabel() async {
-    //url to send the get request to
-    final url = 'http://192.168.8.102:5000/';
-
-    //getting data from the python server script and assigning it to response
-    final response = await http.get(Uri.parse(url));
 
     //converting the fetched data from json to key value pair that can be displayed on the screen
     final decoded = json.decode(response.body) as Map<String, dynamic>;
 
-    //changing the UI be reassigning the fetched data to final response
-    // setState(() {
+    //changing the UI be reassigning the fetched data to final response{
     return decoded['message'];
-    // });
   }
 
   void storeMsg(NotificationEvent msg) async {
@@ -186,39 +172,3 @@ class ChildUncompleteController extends GetxController {
     }
   }
 }
-
-// @override
-// Widget build(BuildContext context) {
-//   return Scaffold(
-//     appBar: AppBar(
-//       title: Text('Notifications Listener Example'),
-//     ),
-//     body: Center(
-//         child: ListView.builder(
-//             itemCount: _log.length,
-//             reverse: true,
-//             itemBuilder: (BuildContext context, int idx) {
-//               final entry = _log[idx];
-//               return ListTile(
-//                   trailing:
-//                   Text(entry.packageName.toString().split('.').last),
-//                   title: Container(
-//                     child: Column(
-//                       crossAxisAlignment: CrossAxisAlignment.start,
-//                       children: [
-//                         Text(entry.title ?? "<<no title>>"),
-//                         Text(entry.createAt.toString().substring(0, 19)),
-//                         Text(entry.text ?? "<<no content>>"),
-//                       ],
-//                     ),
-//                   ));
-//             })),
-//     floatingActionButton: FloatingActionButton(
-//       onPressed: started ? stopListening : startListening,
-//       tooltip: 'Start/Stop sensing',
-//       child: _loading
-//           ? Icon(Icons.close)
-//           : (started ? Icon(Icons.stop) : Icon(Icons.play_arrow)),
-//     ),
-//   );
-// }

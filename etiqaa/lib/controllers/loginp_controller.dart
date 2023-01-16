@@ -8,6 +8,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:etiqaa/database/crud.dart';
 
+import '../main.dart';
+import '../screens/welcoming_screen.dart';
+
 abstract class LogInController extends GetxController {
   loginp();
   toSignup();
