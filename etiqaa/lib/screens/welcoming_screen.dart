@@ -53,7 +53,8 @@ class Welcoming extends StatelessWidget {
                 ),
               )),
         ),
-        body: Column(
+        body: SingleChildScrollView(
+          child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
@@ -106,6 +107,7 @@ class Welcoming extends StatelessWidget {
               ),
             ),
           ],
+            ),
         ));
   }
 }
