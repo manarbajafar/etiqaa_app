@@ -25,6 +25,7 @@ class _LoginPSc extends State<LoginPSc> {
   @override
   Widget build(BuildContext context) {
     LogInControllerImp controller = Get.put(LogInControllerImp());
+    int childrenNum = 0;
 
     @override
     loginp() async {
@@ -41,6 +42,14 @@ class _LoginPSc extends State<LoginPSc> {
         if (response["status"] == "success") {
           sharedPref.setString(
               'parent_id', response['data']['parent_id'].toString());
+          List snap = await _crud.getRequest(linkChildrenList);
+          for (int i = 0; i < snap.length; i++) {
+            if (snap[i]['parent_id'].toString() ==
+                sharedPref.getString('parent_id')) {
+              childrenNum++;
+            }
+            sharedPref.setInt('childrenNum', childrenNum);
+          }
           controller.toHomePage();
         } else {
           msg = true;
