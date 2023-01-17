@@ -108,10 +108,28 @@ class _ChooseChildSc extends State<ChooseChildSc> {
                 future: childrenList(),
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                   List? snap = snapshot.data;
-                  childrenNum = snap!.length;
+
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(
                       child: CircularProgressIndicator(),
+                    );
+                  }
+                  childrenNum = snap!.length;
+                  if (childrenNum == 0) {
+                    return Center(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 30.h, horizontal: 0.h),
+                        child: Text(
+                          "عذرا عليك اضافة طفل من حسابك اولا",
+                          style: TextStyle(
+                            color: Colors.redAccent,
+                            fontSize: 25.sp,
+                            fontFamily: 'FFHekaya',
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
                     );
                   }
                   return ListView.builder(
@@ -119,7 +137,7 @@ class _ChooseChildSc extends State<ChooseChildSc> {
                     physics: NeverScrollableScrollPhysics(),
                     itemCount: snap!.length,
                     itemBuilder: (BuildContext context, index) {
-                      // childrenNum = snap.length;
+                      print(childrenNum);
                       if ('${snap[index]['parent_id']}' ==
                           sharedPref.getString('parent_id')) {
                         return InkWell(
@@ -149,21 +167,21 @@ class _ChooseChildSc extends State<ChooseChildSc> {
                   );
                 },
               ),
-              childrenNum == 0
-                  ? Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 30.h, horizontal: 0.h),
-                      child: Text(
-                        "لا يوجد لديك اطفال يحتاجون تنشيط",
-                        style: TextStyle(
-                          color: Colors.redAccent,
-                          fontSize: 25.sp,
-                          fontFamily: 'FFHekaya',
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    )
-                  : Center()
+              // childrenNum == 0
+              //     ? Padding(
+              //         padding:
+              //             EdgeInsets.symmetric(vertical: 30.h, horizontal: 0.h),
+              //         child: Text(
+              //           "لا يوجد لديك اطفال يحتاجون تنشيط",
+              //           style: TextStyle(
+              //             color: Colors.redAccent,
+              //             fontSize: 25.sp,
+              //             fontFamily: 'FFHekaya',
+              //             fontWeight: FontWeight.bold,
+              //           ),
+              //         ),
+              //       )
+              //     : Center()
             ],
           ),
         ),
