@@ -6,7 +6,6 @@ import '../models/child.dart';
 import '../widgets/childIcon.dart';
 import '../widgets/curvedAppbar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:etiqaa/screens/childAccount.dart';
 import 'package:get/get.dart';
 import '../database/crud.dart';
 import '../database/linkApi.dart';
@@ -119,9 +118,9 @@ class _ChooseChildSc extends State<ChooseChildSc> {
                     return Center(
                       child: Padding(
                         padding: EdgeInsets.symmetric(
-                            vertical: 30.h, horizontal: 0.h),
+                            vertical: 30.h, horizontal: 2.w),
                         child: Text(
-                          "عذرا عليك اضافة طفل من حسابك اولا",
+                          "لا يوجد لديك أطفال مضافين\nقم بإضافة طفل من حسابك أولًا",
                           style: TextStyle(
                             color: Colors.redAccent,
                             fontSize: 25.sp,
