@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'testUI.dart';
 
 late SharedPreferences sharedPref;
 void main() async {
@@ -90,7 +89,6 @@ class MyApp extends StatelessWidget {
           home: sharedPref.getString('parent_id') == null
               ? firstSc()
               : HomePage(),
-          //testUi() HomePage() firstSc
         );
       },
     );

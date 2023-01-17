@@ -202,8 +202,8 @@ class _EditChildAccountState extends State<EditChildAccount> with Crud {
                         pickedDate = await showDatePicker(
                             context: context,
                             initialDate: DateTime.parse(birthdate.text),
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime(2100));
+                            firstDate: DateTime(2006),
+                            lastDate: DateTime(2017));
                         if (pickedDate != null) {
                           setState(() {
                             birthdate.text =

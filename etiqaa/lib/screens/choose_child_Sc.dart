@@ -108,6 +108,7 @@ class _ChooseChildSc extends State<ChooseChildSc> {
                 future: childrenList(),
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                   List? snap = snapshot.data;
+                  childrenNum = snap!.length;
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(
                       child: CircularProgressIndicator(),
@@ -118,7 +119,7 @@ class _ChooseChildSc extends State<ChooseChildSc> {
                     physics: NeverScrollableScrollPhysics(),
                     itemCount: snap!.length,
                     itemBuilder: (BuildContext context, index) {
-                      childrenNum = snap.length;
+                      // childrenNum = snap.length;
                       if ('${snap[index]['parent_id']}' ==
                           sharedPref.getString('parent_id')) {
                         return InkWell(

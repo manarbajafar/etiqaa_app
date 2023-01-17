@@ -90,7 +90,7 @@ class ChildUncombletePSc extends StatelessWidget {
                     SizedBox(
                       width: 10.w,
                     ),
-                    Text(controller.name,
+                    Text(controller.name ?? "",
                         style: Theme.of(context).textTheme.headline5),
                   ],
                 ),
@@ -107,7 +107,7 @@ class ChildUncombletePSc extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(bottom: 10.h),
                 child: Text(
-                  'العمر: ${calculateAge(DateTime.parse(controller.age))}',
+                  'العمر: ${calculateAge(DateTime.parse(controller.age ?? ""))}',
                   textAlign: TextAlign.right,
                   style: Theme.of(context).textTheme.headline5,
                 ),

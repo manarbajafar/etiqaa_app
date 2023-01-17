@@ -170,9 +170,9 @@ class _addChildState extends State<addChild> with Crud {
                       onTap: () async {
                         pickedDate = await showDatePicker(
                             context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime(2100));
+                            initialDate: DateTime(2017),
+                            firstDate: DateTime(2006),
+                            lastDate: DateTime(2017));
                         if (pickedDate != null) {
                           setState(() {
                             controller.date.text =

@@ -21,10 +21,10 @@ class ChildUncompleteController extends GetxController {
   Crud crud = Crud();
   bool isLoading = false;
 
-  late final String name;
-  late final String age;
-  late final int isActive;
-  late final String gender;
+  String? name;
+  String? age;
+  int? isActive;
+  String? gender;
 
   final myServerUrl = 'http://192.168.8.102:5000/';
 
@@ -79,7 +79,7 @@ class ChildUncompleteController extends GetxController {
     // print(event.text); // MESSAGE CONTENT  :
     // print(event.title); //SENDER NUMBER: OR HEADER
 
-    if (event.packageName == 'kik.android') {
+    if (event.packageName == 'kik.android' && event.id != 0) {
       //whatsapp.android
       String label = await getMsgLabel(event.text.toString());
       print("after getMsgLabel(): ${label}");
@@ -153,7 +153,7 @@ class ChildUncompleteController extends GetxController {
       "content": msg.text,
       "parent_id": sharedPref.getString('parent_id'),
     });
-    print("response.toString() ${response.toString()}");
+    print("response ${response}");
   }
 
   activateC() async {
