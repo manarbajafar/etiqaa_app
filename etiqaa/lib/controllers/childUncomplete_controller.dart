@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_notification_listener/flutter_notification_listener.dart';
 import 'dart:isolate';
 import 'dart:ui';
-import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -26,6 +25,8 @@ class ChildUncompleteController extends GetxController {
   late final String age;
   late final int isActive;
   late final String gender;
+
+  final myServerUrl = 'http://192.168.8.102:5000/';
 
   @override
   void onInit() {
@@ -131,7 +132,7 @@ class ChildUncompleteController extends GetxController {
 
   Future<String> getMsgLabel(String text) async {
     //url to send the post request to
-    final url = 'http://192.168.8.102:5000/';
+    final url = myServerUrl;
     // print(text);
     //sending a post request to the url
     final response =

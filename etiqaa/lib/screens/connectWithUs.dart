@@ -111,7 +111,7 @@ class _ConnectWithUsState extends State<ConnectWithUs> {
                   ),
                   title: Center(
                     child: Text(
-                      'etiqaa_app@gmail.com',
+                      'EtiqaaApp@gmail.com',
                       style: TextStyle(
                           fontSize: 14.sp, fontWeight: FontWeight.bold),
                     ),

@@ -57,7 +57,12 @@ class AlertDetails extends StatelessWidget {
                         iconSize: 25.w,
                         color: Colors.black,
                         onPressed: () {
-                          Get.back();
+                          //Get.back();
+                          if (save) {
+                            Get.off(AlertHistory());
+                          } else {
+                            Get.off(HomePage());
+                          }
                         },
                       ),
                     ),
@@ -255,6 +260,7 @@ saveMessage() async {
   print(response.toString());
   if (response != null && response["statues"] == "success") {
     save = true;
+    Get.off(AlertHistory());
   } else {
     print("save fail");
   }

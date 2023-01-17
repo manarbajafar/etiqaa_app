@@ -105,9 +105,11 @@ def index():
   return jsonify({'message' : result}) #returning key-value pair in json format
 
 
+url='192.168.8.102'
+portNum= 5000
 
 if __name__ == "__main__":
-    app.run(host='192.168.8.102', port=5000,debug = True) #debug will allow changes without shutting down the server 
+    app.run(host = url, port = portNum, debug = True) #debug will allow changes without shutting down the server 
 
 
 

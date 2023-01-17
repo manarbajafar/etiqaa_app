@@ -22,27 +22,6 @@ class MessagesCards extends StatefulWidget {
 List<Message> messageList = [];
 int index = 0;
 
-List<Child> childrenlist = [
-  Child(
-    name: 'سارة',
-    isActivated: true,
-    gender: Gender.Girl,
-    birthday: DateTime.utc(2007, 6, 9),
-  ),
-  Child(
-    name: 'عمر',
-    isActivated: false,
-    gender: Gender.Boy,
-    birthday: DateTime.utc(2010, 11, 9),
-  ),
-  // Child(
-  //   name: 'منار',
-  //   isActivated: true,
-  //   gender: Gender.Girl,
-  //   birthday: DateTime.utc(2010, 11, 9),
-  // ),
-];
-
 class _MessagesCardsState extends State<MessagesCards>
     with TickerProviderStateMixin {
   int? childrenNum = sharedPref.getInt('childrenNum');
@@ -72,6 +51,7 @@ class _MessagesCardsState extends State<MessagesCards>
   List msgchild = [];
   bool msg = false;
   messages() async {
+    messageList = [];
     List response = await _crud.getRequest(linkAllMessages);
     for (int i = 0; i < response.length; i++) {
       if (response[i]['parent_id'].toString() ==
@@ -93,9 +73,8 @@ class _MessagesCardsState extends State<MessagesCards>
     msg = true;
     print('${msgid.length} hi');
     for (int i = 0; i < msgid.length; i++) {
-      print('HI HI HI');
       var response = await _crud.postRequest2(linkWhatsAppMessages, {
-        'msg_id': msgid[i],
+        'msg_id': msgid[i].toString(),
       });
       print(response.toString());
       if (response != null && response[0]["statues"] == "success") {
@@ -111,7 +90,7 @@ class _MessagesCardsState extends State<MessagesCards>
           print(responseChild[0]['gender']);
           messageList.add(
             Message(
-                id: int.parse(msgid[i]),
+                id: int.parse(msgid[i].toString()),
                 childName: msgchild[i],
                 childgender: getGender(responseChild[0]['gender']),
                 message: response[0]['content'],
@@ -137,7 +116,8 @@ class _MessagesCardsState extends State<MessagesCards>
   tablist() async {
     List response = await _crud.getRequest(linkChildrenList);
     for (int i = 0; i < response.length; i++) {
-      if (response[i]['parent_id'] == sharedPref.getString('parent_id')) {
+      if (response[i]['parent_id'].toString() ==
+          sharedPref.getString('parent_id')) {
         children.add(
           '${response[i]['child_name']}',
         );

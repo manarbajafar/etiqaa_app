@@ -57,9 +57,11 @@ allMessages() async {
 
   for (int i = 0; i < msgidi.length; i++) {
     var response = await _crud.postRequest(linkAlertHistory, {
-      'msg_id': (msgidi[i]),
+      'msg_id': (msgidi[i].toString()),
     });
-    print(response.toString());
+
+    print("response.toString() : ${response[0]["statues"].toString()}");
+
     if (response != null && response[0]["statues"] == "success") {
       var responseChild = await _crud.postRequest2(linkChild, {
         'child_name': msgchild[i].toString(),
@@ -73,7 +75,7 @@ allMessages() async {
         print(responseChild[0]['gender']);
         messageList.add(
           Message(
-              id: int.parse(msgidi[i]),
+              id: int.parse(msgidi[i].toString()),
               childName: msgchild[i],
               childgender: getGender(responseChild[0]['gender']),
               message: response[0]['content'],
@@ -82,6 +84,7 @@ allMessages() async {
               isSaved: true),
         );
         msgNumber++;
+        print("messageList.length : ${messageList.length}");
       } else {
         print('Child fail');
       }
@@ -183,159 +186,131 @@ class _AlertHistoryState extends State<AlertHistory> {
           'سجل التنبيهات',
           style: Theme.of(context).textTheme.headline1,
         ),
-         Expanded(
-                          flex: 1,
-                          child: ListView.builder(
-                            reverse: false,
-                            shrinkWrap: true,
-                            itemCount: msgNumber,
-                            itemBuilder: ((context, index) {
-                              return Column(
+        Expanded(
+          flex: 1,
+          child: ListView.builder(
+            reverse: false,
+            shrinkWrap: true,
+            itemCount: messageList.length,
+            itemBuilder: ((context, index) {
+              return Column(
+                children: [
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+                    child: SizedBox(
+                      height: 170.h,
+                      width: 280.w,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(40.r),
+                        child: Card(
+                            color: Color.fromRGBO(255, 255, 255, 1),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20.r),
+                              child: Column(
                                 children: [
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 20.w, vertical: 10.h),
-                                    child: SizedBox(
-                                      height: 170.h,
-                                      width: 280.w,
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(40.r),
-                                        child: Card(
-                                            color: Color.fromRGBO(
-                                                255, 255, 255, 1),
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(20.r),
-                                              child: Column(
-                                                children: [
-                                                  Container(
-                                                    height: 45.h,
-                                                    color: Color.fromRGBO(
-                                                        237, 236, 242, 1),
-                                                    child: Row(children: [
-                                                      Padding(
-                                                        padding: EdgeInsets
-                                                            .symmetric(
-                                                          horizontal: 10.w,
-                                                        ),
-                                                        child: messageList[
-                                                                        index]
-                                                                    .childgender ==
-                                                                Gender.Boy
-                                                            ? Image.asset(
-                                                                'images/boyIcon_c.png')
-                                                            : Image.asset(
-                                                                'images/girlIcon_c.png'),
-                                                      ),
-                                                      Padding(
-                                                        padding: EdgeInsets
-                                                            .symmetric(
-                                                                vertical: 2.h),
-                                                        child: Text(
-                                                          '${messageList[index].childName}',
-                                                          style:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .headline1,
-                                                        ),
-                                                      )
-                                                    ]),
-                                                  ),
-                                                  Align(
-                                                    alignment:
-                                                        Alignment.topRight,
-                                                    child: Padding(
-                                                      padding:
-                                                          EdgeInsets.symmetric(
-                                                              horizontal: 15.w),
-                                                      child: Text(
-                                                        'العبارة',
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .headline1,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Align(
-                                                    alignment:
-                                                        Alignment.topRight,
-                                                    child: Padding(
-                                                      padding:
-                                                          EdgeInsets.symmetric(
-                                                              horizontal: 15.w),
-                                                      child: Text(
-                                                        '${messageList[index].message}',
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .headline5,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 10.w),
-                                                    child: Align(
-                                                      alignment:
-                                                          Alignment.topLeft,
-                                                      child: TextButton(
-                                                        onPressed: () {
-                                                          Get.off(
-                                                            AlertDetails(
-                                                              name: messageList[
-                                                                      index]
-                                                                  .childName,
-                                                              date: messageList[
-                                                                      index]
-                                                                  .date,
-                                                              sender: messageList[
-                                                                      index]
-                                                                  .senderName,
-                                                              content:
-                                                                  messageList[
-                                                                          index]
-                                                                      .message,
-                                                              gender: (messageList[
-                                                                      index]
-                                                                  .childgender),
-                                                              isSaved:
-                                                                  messageList[
-                                                                          index]
-                                                                      .isSaved,
-                                                              id: messageList[
-                                                                      index]
-                                                                  .id,
-                                                            ),
-                                                          );
-                                                        },
-                                                        child: Text(
-                                                          'المزيد',
-                                                          style: TextStyle(
-                                                            color: Colors.black,
-                                                            fontSize: 15.sp,
-                                                            fontFamily:
-                                                                'FFHekaya',
-                                                            decoration:
-                                                                TextDecoration
-                                                                    .underline,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            )),
+                                  Container(
+                                    height: 45.h,
+                                    color: Color.fromRGBO(237, 236, 242, 1),
+                                    child: Row(children: [
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 10.w,
+                                        ),
+                                        child: messageList[index].childgender ==
+                                                Gender.Boy
+                                            ? Image.asset(
+                                                'images/boyIcon_c.png')
+                                            : Image.asset(
+                                                'images/girlIcon_c.png'),
+                                      ),
+                                      Padding(
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 2.h),
+                                        child: Text(
+                                          '${messageList[index].childName}',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline1,
+                                        ),
+                                      )
+                                    ]),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.topRight,
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 15.w),
+                                      child: Text(
+                                        'العبارة',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline1,
                                       ),
                                     ),
                                   ),
+                                  Align(
+                                    alignment: Alignment.topRight,
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 15.w),
+                                      child: Text(
+                                        '${messageList[index].message}',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline5,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 10.w),
+                                    child: Align(
+                                      alignment: Alignment.topLeft,
+                                      child: TextButton(
+                                        onPressed: () {
+                                          Get.off(
+                                            AlertDetails(
+                                              name:
+                                                  messageList[index].childName,
+                                              date: messageList[index].date,
+                                              sender:
+                                                  messageList[index].senderName,
+                                              content:
+                                                  messageList[index].message,
+                                              gender: (messageList[index]
+                                                  .childgender),
+                                              isSaved:
+                                                  messageList[index].isSaved,
+                                              id: messageList[index].id,
+                                            ),
+                                          );
+                                        },
+                                        child: Text(
+                                          'المزيد',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 15.sp,
+                                            fontFamily: 'FFHekaya',
+                                            decoration:
+                                                TextDecoration.underline,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  )
                                 ],
-                              );
-                            }),
-                          ),
-                        ),
-                      ]),
+                              ),
+                            )),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            }),
+          ),
+        ),
+      ]),
     );
   }
 }
