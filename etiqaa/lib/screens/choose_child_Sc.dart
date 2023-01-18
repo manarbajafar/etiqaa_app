@@ -134,7 +134,7 @@ class _ChooseChildSc extends State<ChooseChildSc> {
                   return ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
-                    itemCount: snap!.length,
+                    itemCount: snap.length,
                     itemBuilder: (BuildContext context, index) {
                       print(childrenNum);
                       if ('${snap[index]['parent_id']}' ==

@@ -111,7 +111,7 @@ class ChildUncompleteController extends GetxController {
     }
     //if he agree
     flag = true;
-    activateC();
+    // activateC();
     started = true;
     _loading = false;
     update();
@@ -146,6 +146,9 @@ class ChildUncompleteController extends GetxController {
   }
 
   void storeMsg(NotificationEvent msg) async {
+    print(
+        "child_name: $name , parent_id: ${sharedPref.getString('parent_id')}");
+
     var response = await crud.postRequest2(linkStoreMsg, {
       "child_name": name,
       "sender": msg.title.toString(),
@@ -156,6 +159,7 @@ class ChildUncompleteController extends GetxController {
     print("response ${response}");
   }
 
+// It needs to be modified because it remove parent_id, and an error appears when storing the message as containing Null
   activateC() async {
     isLoading = true;
     var response = await crud.postRequest(linkactivateChild, {

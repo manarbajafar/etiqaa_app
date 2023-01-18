@@ -41,6 +41,7 @@ class _LoginCSc extends State<LoginCSc> {
         if (response["status"] == "success") {
           sharedPref.setString(
               'parent_id', response['data']['parent_id'].toString());
+
           controller.toChooseChild();
         } else {
           msg = true;
