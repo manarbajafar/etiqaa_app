@@ -11,7 +11,7 @@ to run the project:
 
 - pip install camel-tools
 - Pip install flask
-(هذي ماني متأكدة اذا تتحمل مباشرة لو نزلتو البروجكت بس حجرب وقت ثاني)
+(اخر اثنين ماني متأكدة اذا تتحمل مباشرة لو نزلتو البروجكت بس حجرب وقت ثاني)
 
 2. Follow these steps:
 Press the Windows button and type env.
