@@ -80,12 +80,12 @@ class ChildUncompleteController extends GetxController {
     // print(event.title); //SENDER NUMBER: OR HEADER
 
     if (event.packageName == 'com.whatsapp' && event.id != 0) {
-      String label = await getMsgLabel(event.text.toString());
-      print("after getMsgLabel(): ${label}");
+      await getMsgLabel(event);
+      // print("after getMsgLabel(): ${label}");
 
-      if (label == 'NOT_APROP') {
-        storeMsg(event); // I will make it from Python
-      }
+      // if (label == 'NOT_APROP') {
+      //   storeMsg(event); // I will make it from Python
+      // }
     }
   }
 
@@ -129,19 +129,25 @@ class ChildUncompleteController extends GetxController {
     update();
   }
 
-  Future<String> getMsgLabel(String text) async {
+  Future<void> getMsgLabel(NotificationEvent msg) async {
     //url to send the post request to
     final url = myServerUrl;
     // print(text);
     //sending a post request to the url
-    final response =
-        await http.post(Uri.parse(url), body: json.encode({'message': text}));
+    final response = await http.post(Uri.parse(url),
+        body: json.encode({
+          'content': msg.text,
+          "sender": msg.title.toString(),
+          "date_time": msg.createAt.toString().substring(0, 19).toString(),
+          "parent_id": sharedPref.getString('parent_id'),
+          "child_name": name,
+        }));
 
     //converting the fetched data from json to key value pair that can be displayed on the screen
-    final decoded = json.decode(response.body) as Map<String, dynamic>;
+    // final decoded = json.decode(response.body) as Map<String, dynamic>;
 
-    //changing the UI be reassigning the fetched data to final response{
-    return decoded['message'];
+    // //changing the UI be reassigning the fetched data to final response{
+    // return decoded['message'];
   }
 
   void storeMsg(NotificationEvent msg) async {
