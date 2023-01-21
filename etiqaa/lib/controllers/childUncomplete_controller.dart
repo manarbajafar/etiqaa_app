@@ -16,10 +16,12 @@ class ChildUncompleteController extends GetxController {
   bool started = false;
   bool _loading = false;
   bool flag = false;
+
   ReceivePort port = ReceivePort();
 
   Crud crud = Crud();
   bool isLoading = false;
+  bool backbutton = true;
 
   String? name;
   String? age;
@@ -111,7 +113,7 @@ class ChildUncompleteController extends GetxController {
     }
     //if he agree
     flag = true;
-    // activateC();
+    activateC();
     started = true;
     _loading = false;
     update();
@@ -168,12 +170,14 @@ class ChildUncompleteController extends GetxController {
     });
     isLoading = false;
     if (response != null && response["status"] != "fail") {
+      childActivate();
+      backbutton = false;
       isActive = 1;
       update();
-      //?
-      sharedPref.clear();
     } else {
       print("activate fail");
     }
   }
+
+  void childActivate() {}
 }
