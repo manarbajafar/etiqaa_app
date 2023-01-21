@@ -15,7 +15,6 @@ import json
 
 
 
-
 app = Flask(__name__) #intance of our flask application 
 
 
@@ -75,6 +74,7 @@ result = ''
 #Route '/' to facilitate get request from our flutter app
 @app.route('/', methods = ['POST'])
 
+
 def index():
 
   # import trained vectorizer and model
@@ -102,10 +102,15 @@ def index():
 
   result = str(predictedClass[0])
 
+
   return jsonify({'message' : result}) #returning key-value pair in json format
 
 
 url='192.168.8.102'
+# url='http://10.0.2.2'
+# url='127.0.0.1'
+
+
 portNum= 5000
 
 if __name__ == "__main__":
