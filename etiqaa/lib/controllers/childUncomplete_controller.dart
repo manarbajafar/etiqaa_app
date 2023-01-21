@@ -79,13 +79,12 @@ class ChildUncompleteController extends GetxController {
     // print(event.text); // MESSAGE CONTENT  :
     // print(event.title); //SENDER NUMBER: OR HEADER
 
-    if (event.packageName == 'kik.android' && event.id != 0) {
-      //whatsapp.android
+    if (event.packageName == 'com.whatsapp' && event.id != 0) {
       String label = await getMsgLabel(event.text.toString());
       print("after getMsgLabel(): ${label}");
 
       if (label == 'NOT_APROP') {
-        storeMsg(event);
+        storeMsg(event); // I will make it from Python
       }
     }
   }
@@ -159,7 +158,6 @@ class ChildUncompleteController extends GetxController {
     print("response ${response}");
   }
 
-// It needs to be modified because it remove parent_id, and an error appears when storing the message as containing Null
   activateC() async {
     isLoading = true;
     var response = await crud.postRequest(linkactivateChild, {
@@ -170,8 +168,6 @@ class ChildUncompleteController extends GetxController {
     if (response != null && response["status"] != "fail") {
       isActive = 1;
       update();
-      //?
-      sharedPref.clear();
     } else {
       print("activate fail");
     }
