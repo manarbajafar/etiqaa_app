@@ -136,11 +136,10 @@ def index():
       mycursor.execute(sql, val)
 
     mydb.commit()
+    return jsonify({'label' : result})
   ######
-  ## i need to return id, name, msg_id
-  return "" #returning key-value pair in json format
-  #return jsonify({'message' : result}) #returning key-value pair in json format
-
+  return jsonify({'label' : 'APROP'}) #returning key-value pair in json format
+  
 
 url='192.168.8.102'
 # url='http://10.0.2.2'
