@@ -40,121 +40,139 @@ class ChildUncombletePSc extends StatelessWidget {
     return age;
   }
 
+  bool back = true;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(400.r),
-          ),
-        ),
-        flexibleSpace: ClipRRect(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(400.r),
-          ),
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Theme.of(context).accentColor,
-                  Theme.of(context).primaryColor,
-                ],
-              ),
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: AppBar(
+          leading: GetBuilder<ChildUncompleteController>(builder: (controller) {
+            return controller.backbutton
+                ? IconButton(
+                    alignment: Alignment(-1.0.w, -0.7.w),
+                    icon: Icon(Icons.arrow_back, color: Colors.white),
+                    onPressed: () => Navigator.of(context).pop(),
+                  )
+                : Text("");
+          }),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(400.r),
             ),
           ),
-        ),
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(250.h),
-          child: Column(
-            children: [
-              Image.asset(
-                'images/whiteLogo.png',
-                height: 150.h,
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 28.h, bottom: 30.h, right: 20.w),
-                child: Row(
-                  children: [
-                    Image.asset(
-                      // iconUrl(gender, isActivated),
-                      ChildAccount.iconUrl(
-                          controller.gender.toString() == 'أنثى'
-                              ? Gender.Girl
-                              : Gender.Boy,
-                          controller.isActive == 0 ? false : true),
-                      height: 70.h,
-                    ),
-                    SizedBox(
-                      width: 10.w,
-                    ),
-                    Text(controller.name ?? "",
-                        style: Theme.of(context).textTheme.headline5),
+          flexibleSpace: ClipRRect(
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(400.r),
+            ),
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Theme.of(context).accentColor,
+                    Theme.of(context).primaryColor,
                   ],
                 ),
               ),
-            ],
+            ),
+          ),
+          bottom: PreferredSize(
+            preferredSize: Size.fromHeight(250.h),
+            child: Column(
+              children: [
+                Image.asset(
+                  'images/whiteLogo.png',
+                  height: 150.h,
+                ),
+                Padding(
+                  padding:
+                      EdgeInsets.only(top: 28.h, bottom: 30.h, right: 20.w),
+                  child: GetBuilder<ChildUncompleteController>(
+                    builder: (controller) => Row(
+                      children: [
+                        Image.asset(
+                          // iconUrl(gender, isActivated),
+
+                          ChildAccount.iconUrl(
+                              controller.gender.toString() == 'أنثى'
+                                  ? Gender.Girl
+                                  : Gender.Boy,
+                              controller.isActive == 0 ? false : true),
+                          height: 70.h,
+                        ),
+                        SizedBox(
+                          width: 10.w,
+                        ),
+                        Text(controller.name ?? "",
+                            style: Theme.of(context).textTheme.headline5),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-      body: SingleChildScrollView(
-        child: GetBuilder<ChildUncompleteController>(
-          init: ChildUncompleteController(),
-          builder: (value) => Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(bottom: 10.h),
-                child: Text(
-                  'العمر: ${calculateAge(DateTime.parse(controller.age ?? ""))}',
-                  textAlign: TextAlign.right,
-                  style: Theme.of(context).textTheme.headline5,
+        body: SingleChildScrollView(
+          child: GetBuilder<ChildUncompleteController>(
+            init: ChildUncompleteController(),
+            builder: (value) => Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(bottom: 10.h),
+                  child: Text(
+                    'العمر: ${calculateAge(DateTime.parse(controller.age ?? ""))}',
+                    textAlign: TextAlign.right,
+                    style: Theme.of(context).textTheme.headline5,
+                  ),
                 ),
-              ),
-              Center(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 3.h, horizontal: 3.w),
+                Center(
+                  child: Padding(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 3.h, horizontal: 3.w),
+                    child: !value.flag
+                        ? Text(
+                            'لم يتم إنهاء اجراءات هذا الطفل',
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.headline3,
+                          )
+                        : Text(
+                            'تم انهاء إجراءات هذا الطفل ',
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.headline3,
+                          ),
+                  ),
+                ),
+                SizedBox(
+                  height: 20.h,
+                ),
+                Center(
                   child: !value.flag
-                      ? Text(
-                          'لم يتم إنهاء اجراءات هذا الطفل',
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.headline3,
+                      ? SizedBox(
+                          height: 40.h,
+                          width: 200.w,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Theme.of(context).buttonColor,
+                            ),
+                            onPressed: () {
+                              print("message 1 ${value.started}");
+                              value.started
+                                  ? value.stopListening()
+                                  : value.startListening();
+                            },
+                            child: Text(
+                              ' إنهاء الاجراءات ',
+                              style: Theme.of(context).textTheme.headline4,
+                            ),
+                          ),
                         )
-                      : Text(
-                          'تم انهاء إجراءات هذا الطفل ',
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.headline3,
-                        ),
+                      : null,
                 ),
-              ),
-              SizedBox(
-                height: 20.h,
-              ),
-              Center(
-                child: !value.flag
-                    ? SizedBox(
-                        height: 40.h,
-                        width: 200.w,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Theme.of(context).buttonColor,
-                          ),
-                          onPressed: () {
-                            print("message 1 ${value.started}");
-                            value.started
-                                ? value.stopListening()
-                                : value.startListening();
-                          },
-                          child: Text(
-                            ' إنهاء الاجراءات ',
-                            style: Theme.of(context).textTheme.headline4,
-                          ),
-                        ),
-                      )
-                    : null,
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
