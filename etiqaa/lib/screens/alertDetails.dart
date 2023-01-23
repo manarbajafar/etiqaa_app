@@ -1,5 +1,6 @@
 import 'package:etiqaa/database/crud.dart';
 import 'package:etiqaa/database/linkApi.dart';
+import 'package:etiqaa/main.dart';
 import 'package:etiqaa/screens/alertHistory.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,6 +11,7 @@ import 'homepage.dart';
 
 late int idM;
 late bool save;
+late String childName;
 
 class AlertDetails extends StatelessWidget {
   final int id;
@@ -35,6 +37,7 @@ class AlertDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     save = isSaved;
     idM = id;
+    childName = name;
     bool isVisible = true;
     return Scaffold(
       body: Column(
@@ -240,9 +243,9 @@ Crud _crud = Crud();
 deleteMessage() async {
   var response = await _crud.postRequest2(linkdeleteMessages, {
     'msg_id': idM.toString(),
+    'parent_id': sharedPref.getString('parent_id'),
+    'child_name': childName,
   });
-
-  // response = jsonDecode(response.toString());
   print(response.toString());
   if (response != null && response["statues"] == "success") {
     save = true;
@@ -254,6 +257,8 @@ deleteMessage() async {
 saveMessage() async {
   var response = await _crud.postRequest2(linkSaveMessage, {
     'msg_id': idM.toString(),
+    'parent_id': sharedPref.getString('parent_id'),
+    'child_name': childName,
   });
 
   // response = jsonDecode(response.toString());

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:etiqaa/database/crud.dart';
 import 'package:etiqaa/main.dart';
+import 'package:etiqaa/screens/alertHistory.dart';
 import 'package:etiqaa/screens/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -26,21 +27,21 @@ class _MessagesCardsState extends State<MessagesCards>
     with TickerProviderStateMixin {
   int? childrenNum = sharedPref.getInt('childrenNum');
   void initState() {
+    messageList = [];
     setState(() {
       tablist();
-      messages();
     });
     super.initState();
   }
 
-  Gender getGender(String gender) {
+  getGender(String gender) {
     switch (gender) {
       case 'ذكر':
         return Gender.Boy;
       case 'أنثى':
         return Gender.Girl;
       default:
-        return Gender.Boy;
+        return '';
     }
   }
 
@@ -49,66 +50,42 @@ class _MessagesCardsState extends State<MessagesCards>
   List msgid = [];
   int msgSaved = 0;
   List msgchild = [];
+
+  int msgNumber = 0;
   bool msg = false;
   messages() async {
     messageList = [];
-    List response = await _crud.getRequest(linkAllMessages);
-    for (int i = 0; i < response.length; i++) {
-      if (response[i]['parent_id'].toString() ==
-          sharedPref.getString('parent_id')) {
-        msgid.add(response[i]['msg_id']);
-        msgchild.add(response[i]['child_name']);
-        msg = true;
-      } else {}
-    }
-    if (msg == true) {
-      setState(() {
-        allMessages();
-      });
-    }
-  }
-
-  int msgNumber = 0;
-  allMessages() async {
-    msg = true;
-    print('${msgid.length} hi');
-    for (int i = 0; i < msgid.length; i++) {
-      var response = await _crud.postRequest2(linkWhatsAppMessages, {
-        'msg_id': msgid[i].toString(),
-      });
-      print(response.toString());
-      if (response != null && response[0]["statues"] == "success") {
+    List response = await _crud.postRequest2(linkWhatsAppMessages, {
+      'parent_id': sharedPref.getString('parent_id'),
+    });
+    if (response != null && response[0]["statues"] == "success") {
+      msg = true;
+      for (int i = 0; i < response.length; i++) {
         var responseChild = await _crud.postRequest2(linkChild, {
-          'child_name': msgchild[i].toString(),
+          'child_name': response[i]["child_name"],
           'parent_id': sharedPref.getString('parent_id'),
         });
-        print(responseChild.toString());
+        print('responceChild: ${responseChild.toString()}');
         if (responseChild != null && responseChild[0]['statues'] == "success") {
-          // AsyncSnapshot snap = responseChild;
-          print(response.toString());
-          // response = jsonEncode(response.toString());
-          print(responseChild[0]['gender']);
           messageList.add(
             Message(
-                id: int.parse(msgid[i].toString()),
-                childName: msgchild[i],
+                id: int.parse(response[i]['msg_id']),
+                childName: responseChild[0]['child_name'],
                 childgender: getGender(responseChild[0]['gender']),
-                message: response[0]['content'],
-                date: response[0]['date_time'].toString(),
-                senderName: response[0]['sender'],
+                message: response[i]['content'],
+                date: response[i]['date_time'].toString(),
+                senderName: response[i]['sender'],
                 isSaved: false),
           );
           msgNumber++;
         } else {
           print('Child fail');
         }
-      } else {
-        msgSaved++;
-        print('Msg fail');
       }
+    } else {
+      print('Msg fail');
     }
-    print(msgSaved);
-    print('how');
+    return messageList;
   }
 
   List children = [];
@@ -123,6 +100,43 @@ class _MessagesCardsState extends State<MessagesCards>
         );
       }
     }
+    messages();
+  }
+
+  childMessage(int index) async {
+    List<Message> childList = [];
+    List response = await _crud.postRequest2(linkWhatsAppMessages, {
+      'parent_id': sharedPref.getString('parent_id'),
+      'child_name': children[index],
+    });
+    if (response != [] && response[0]["statues"] == "success") {
+      for (int i = 0; i < response.length; i++) {
+        var responseChild = await _crud.postRequest2(linkChild, {
+          'child_name': response[i]["child_name"],
+          'parent_id': sharedPref.getString('parent_id'),
+        });
+        if (responseChild != null && responseChild[0]['statues'] == "success") {
+          if (response[i]['child_name'] == children[index]) {
+            print('${children[index]}=> ${responseChild[0]['gender']}');
+            childList.add(
+              Message(
+                  id: int.parse(response[i]['msg_id']),
+                  childName: responseChild[0]['child_name'],
+                  childgender: getGender(responseChild[0]['gender']),
+                  message: response[i]['content'],
+                  date: response[i]['date_time'].toString(),
+                  senderName: response[i]['sender'],
+                  isSaved: false),
+            );
+          }
+        } else {
+          print('Child fail');
+        }
+      }
+    } else {
+      print('Msg fail');
+    }
+    return childList;
   }
 
   @override
@@ -227,7 +241,7 @@ class _MessagesCardsState extends State<MessagesCards>
                       : null),
             ],
           ),
-          msgid.length == msgSaved
+          msg == false
               ? Padding(
                   padding: EdgeInsets.symmetric(vertical: 20.h),
                   child: Center(
@@ -254,164 +268,754 @@ class _MessagesCardsState extends State<MessagesCards>
                         ),
                         Expanded(
                           flex: 1,
-                          child: ListView.builder(
-                            reverse: false,
-                            shrinkWrap: true,
-                            itemCount: msgNumber,
-                            itemBuilder: ((context, index) {
-                              return Column(
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 20.w, vertical: 10.h),
-                                    child: SizedBox(
-                                      height: 170.h,
-                                      width: 280.w,
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(40.r),
-                                        child: Card(
-                                            color: Color.fromRGBO(
-                                                255, 255, 255, 1),
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(20.r),
-                                              child: Column(
-                                                children: [
-                                                  Container(
-                                                    height: 45.h,
-                                                    color: Color.fromRGBO(
-                                                        237, 236, 242, 1),
-                                                    child: Row(children: [
-                                                      Padding(
-                                                        padding: EdgeInsets
-                                                            .symmetric(
-                                                          horizontal: 10.w,
-                                                        ),
-                                                        child: messageList[
-                                                                        index]
-                                                                    .childgender ==
-                                                                Gender.Boy
-                                                            ? Image.asset(
-                                                                'images/boyIcon_c.png')
-                                                            : Image.asset(
-                                                                'images/girlIcon_c.png'),
-                                                      ),
-                                                      Padding(
-                                                        padding: EdgeInsets
-                                                            .symmetric(
-                                                                vertical: 2.h),
-                                                        child: Text(
-                                                          '${messageList[index].childName}',
-                                                          style:
-                                                              Theme.of(context)
+                          child: FutureBuilder(
+                            future: messages(),
+                            builder:
+                                (BuildContext context, AsyncSnapshot snapshot) {
+                              List? snap = snapshot.data;
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }
+                              return ListView.builder(
+                                reverse: false,
+                                shrinkWrap: true,
+                                itemCount: snap!.length,
+                                itemBuilder: ((context, index) {
+                                  return Column(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 20.w, vertical: 10.h),
+                                        child: SizedBox(
+                                          height: 170.h,
+                                          width: 280.w,
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(40.r),
+                                            child: Card(
+                                                color: Color.fromRGBO(
+                                                    255, 255, 255, 1),
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          20.r),
+                                                  child: Column(
+                                                    children: [
+                                                      Container(
+                                                        height: 45.h,
+                                                        color: Color.fromRGBO(
+                                                            237, 236, 242, 1),
+                                                        child: Row(children: [
+                                                          Padding(
+                                                            padding: EdgeInsets
+                                                                .symmetric(
+                                                              horizontal: 10.w,
+                                                            ),
+                                                            child: snap[index]
+                                                                        .childgender ==
+                                                                    Gender.Boy
+                                                                ? Image.asset(
+                                                                    'images/boyIcon_c.png')
+                                                                : Image.asset(
+                                                                    'images/girlIcon_c.png'),
+                                                          ),
+                                                          Padding(
+                                                            padding: EdgeInsets
+                                                                .symmetric(
+                                                                    vertical:
+                                                                        2.h),
+                                                            child: Text(
+                                                              '${snap[index].childName}',
+                                                              style: Theme.of(
+                                                                      context)
                                                                   .textTheme
                                                                   .headline1,
-                                                        ),
-                                                      )
-                                                    ]),
-                                                  ),
-                                                  Align(
-                                                    alignment:
-                                                        Alignment.topRight,
-                                                    child: Padding(
-                                                      padding:
-                                                          EdgeInsets.symmetric(
-                                                              horizontal: 15.w),
-                                                      child: Text(
-                                                        'العبارة',
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .headline1,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Align(
-                                                    alignment:
-                                                        Alignment.topRight,
-                                                    child: Padding(
-                                                      padding:
-                                                          EdgeInsets.symmetric(
-                                                              horizontal: 15.w),
-                                                      child: Text(
-                                                        '${messageList[index].message}',
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .headline5,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 10.w),
-                                                    child: Align(
-                                                      alignment:
-                                                          Alignment.topLeft,
-                                                      child: TextButton(
-                                                        onPressed: () {
-                                                          Get.off(
-                                                            AlertDetails(
-                                                              name: messageList[
-                                                                      index]
-                                                                  .childName,
-                                                              date: messageList[
-                                                                      index]
-                                                                  .date,
-                                                              sender: messageList[
-                                                                      index]
-                                                                  .senderName,
-                                                              content:
-                                                                  messageList[
-                                                                          index]
-                                                                      .message,
-                                                              gender: (messageList[
-                                                                      index]
-                                                                  .childgender),
-                                                              isSaved:
-                                                                  messageList[
-                                                                          index]
-                                                                      .isSaved,
-                                                              id: messageList[
-                                                                      index]
-                                                                  .id,
                                                             ),
-                                                          );
-                                                        },
-                                                        child: Text(
-                                                          'المزيد',
-                                                          style: TextStyle(
-                                                            color: Colors.black,
-                                                            fontSize: 15.sp,
-                                                            fontFamily:
-                                                                'FFHekaya',
-                                                            decoration:
-                                                                TextDecoration
-                                                                    .underline,
+                                                          )
+                                                        ]),
+                                                      ),
+                                                      Align(
+                                                        alignment:
+                                                            Alignment.topRight,
+                                                        child: Padding(
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                                  horizontal:
+                                                                      15.w),
+                                                          child: Text(
+                                                            'العبارة',
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .headline1,
                                                           ),
                                                         ),
                                                       ),
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            )),
+                                                      Align(
+                                                        alignment:
+                                                            Alignment.topRight,
+                                                        child: Padding(
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                                  horizontal:
+                                                                      15.w),
+                                                          child: Text(
+                                                            '${snap[index].message}',
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .headline5,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding: EdgeInsets
+                                                            .symmetric(
+                                                                horizontal:
+                                                                    10.w),
+                                                        child: Align(
+                                                          alignment:
+                                                              Alignment.topLeft,
+                                                          child: TextButton(
+                                                            onPressed: () {
+                                                              Get.off(
+                                                                AlertDetails(
+                                                                  name: snap[
+                                                                          index]
+                                                                      .childName,
+                                                                  date: snap[
+                                                                          index]
+                                                                      .date,
+                                                                  sender: snap[
+                                                                          index]
+                                                                      .senderName,
+                                                                  content: snap[
+                                                                          index]
+                                                                      .message,
+                                                                  gender: (snap[
+                                                                          index]
+                                                                      .childgender),
+                                                                  isSaved: snap[
+                                                                          index]
+                                                                      .isSaved,
+                                                                  id: snap[
+                                                                          index]
+                                                                      .id,
+                                                                ),
+                                                              );
+                                                            },
+                                                            child: Text(
+                                                              'المزيد',
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .black,
+                                                                fontSize: 15.sp,
+                                                                fontFamily:
+                                                                    'FFHekaya',
+                                                                decoration:
+                                                                    TextDecoration
+                                                                        .underline,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                )),
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                ],
+                                    ],
+                                  );
+                                }),
                               );
-                            }),
+                            },
                           ),
-                        ),
+                        )
                       ],
                     ),
-                    Column(children: []),
+                    Column(children: [
+                      children.length < 1
+                          ? Padding(
+                              padding: EdgeInsets.symmetric(vertical: 20.h),
+                              child: Center(
+                                  child: Text(
+                                'لايوجد رسائل',
+                                style: Theme.of(context).textTheme.headline1,
+                              )),
+                            )
+                          : Expanded(
+                              flex: 1,
+                              child: FutureBuilder(
+                                future: childMessage(0),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot snapshot) {
+                                  List? snap = snapshot.data;
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }
+                                  return snap!.isEmpty
+                                      ? Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 20.h),
+                                          child: Text(
+                                            'لايوجد رسائل',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline1,
+                                          ),
+                                        )
+                                      : ListView.builder(
+                                          reverse: false,
+                                          shrinkWrap: true,
+                                          itemCount: snap.length,
+                                          itemBuilder: ((context, index) {
+                                            return Column(
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 20.w,
+                                                      vertical: 10.h),
+                                                  child: SizedBox(
+                                                    height: 170.h,
+                                                    width: 280.w,
+                                                    child: ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              40.r),
+                                                      child: Card(
+                                                          color: Color.fromRGBO(
+                                                              255, 255, 255, 1),
+                                                          child: ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        20.r),
+                                                            child: Column(
+                                                              children: [
+                                                                Container(
+                                                                  height: 45.h,
+                                                                  color: Color
+                                                                      .fromRGBO(
+                                                                          237,
+                                                                          236,
+                                                                          242,
+                                                                          1),
+                                                                  child: Row(
+                                                                      children: [
+                                                                        Padding(
+                                                                          padding:
+                                                                              EdgeInsets.symmetric(
+                                                                            horizontal:
+                                                                                10.w,
+                                                                          ),
+                                                                          child: snap[index].childgender == Gender.Boy
+                                                                              ? Image.asset('images/boyIcon_c.png')
+                                                                              : Image.asset('images/girlIcon_c.png'),
+                                                                        ),
+                                                                        Padding(
+                                                                          padding:
+                                                                              EdgeInsets.symmetric(vertical: 2.h),
+                                                                          child:
+                                                                              Text(
+                                                                            '${snap[index].childName}',
+                                                                            style:
+                                                                                Theme.of(context).textTheme.headline1,
+                                                                          ),
+                                                                        )
+                                                                      ]),
+                                                                ),
+                                                                Align(
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .topRight,
+                                                                  child:
+                                                                      Padding(
+                                                                    padding: EdgeInsets.symmetric(
+                                                                        horizontal:
+                                                                            15.w),
+                                                                    child: Text(
+                                                                      'العبارة',
+                                                                      style: Theme.of(
+                                                                              context)
+                                                                          .textTheme
+                                                                          .headline1,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                Align(
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .topRight,
+                                                                  child:
+                                                                      Padding(
+                                                                    padding: EdgeInsets.symmetric(
+                                                                        horizontal:
+                                                                            15.w),
+                                                                    child: Text(
+                                                                      '${snap[index].message}',
+                                                                      style: Theme.of(
+                                                                              context)
+                                                                          .textTheme
+                                                                          .headline5,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                Padding(
+                                                                  padding: EdgeInsets
+                                                                      .symmetric(
+                                                                          horizontal:
+                                                                              10.w),
+                                                                  child: Align(
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .topLeft,
+                                                                    child:
+                                                                        TextButton(
+                                                                      onPressed:
+                                                                          () {
+                                                                        Get.off(
+                                                                          AlertDetails(
+                                                                            name:
+                                                                                snap[index].childName,
+                                                                            date:
+                                                                                snap[index].date,
+                                                                            sender:
+                                                                                snap[index].senderName,
+                                                                            content:
+                                                                                snap[index].message,
+                                                                            gender:
+                                                                                (snap[index].childgender),
+                                                                            isSaved:
+                                                                                snap[index].isSaved,
+                                                                            id: snap[index].id,
+                                                                          ),
+                                                                        );
+                                                                      },
+                                                                      child:
+                                                                          Text(
+                                                                        'المزيد',
+                                                                        style:
+                                                                            TextStyle(
+                                                                          color:
+                                                                              Colors.black,
+                                                                          fontSize:
+                                                                              15.sp,
+                                                                          fontFamily:
+                                                                              'FFHekaya',
+                                                                          decoration:
+                                                                              TextDecoration.underline,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            ),
+                                                          )),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            );
+                                          }),
+                                        );
+                                },
+                              ),
+                            )
+                    ]),
                     Column(
-                      children: [],
+                      children: [
+                        children.length < 2
+                            ? Padding(
+                                padding: EdgeInsets.symmetric(vertical: 20.h),
+                                child: Center(
+                                    child: Text(
+                                  'لايوجد رسائل',
+                                  style: Theme.of(context).textTheme.headline1,
+                                )),
+                              )
+                            : Expanded(
+                                flex: 1,
+                                child: FutureBuilder(
+                                  future: childMessage(1),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot snapshot) {
+                                    List? snap = snapshot.data;
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return Center(
+                                        child: CircularProgressIndicator(),
+                                      );
+                                    }
+                                    return snap!.isEmpty
+                                        ? Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 20.h),
+                                            child: Text(
+                                              'لايوجد رسائل',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline1,
+                                            ),
+                                          )
+                                        : ListView.builder(
+                                            reverse: false,
+                                            shrinkWrap: true,
+                                            itemCount: snap.length,
+                                            itemBuilder: ((context, index) {
+                                              return Column(
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 20.w,
+                                                            vertical: 10.h),
+                                                    child: SizedBox(
+                                                      height: 170.h,
+                                                      width: 280.w,
+                                                      child: ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(40.r),
+                                                        child: Card(
+                                                            color:
+                                                                Color.fromRGBO(
+                                                                    255,
+                                                                    255,
+                                                                    255,
+                                                                    1),
+                                                            child: ClipRRect(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          20.r),
+                                                              child: Column(
+                                                                children: [
+                                                                  Container(
+                                                                    height:
+                                                                        45.h,
+                                                                    color: Color
+                                                                        .fromRGBO(
+                                                                            237,
+                                                                            236,
+                                                                            242,
+                                                                            1),
+                                                                    child: Row(
+                                                                        children: [
+                                                                          Padding(
+                                                                            padding:
+                                                                                EdgeInsets.symmetric(
+                                                                              horizontal: 10.w,
+                                                                            ),
+                                                                            child: snap[index].childgender == Gender.Boy
+                                                                                ? Image.asset('images/boyIcon_c.png')
+                                                                                : Image.asset('images/girlIcon_c.png'),
+                                                                          ),
+                                                                          Padding(
+                                                                            padding:
+                                                                                EdgeInsets.symmetric(vertical: 2.h),
+                                                                            child:
+                                                                                Text(
+                                                                              '${snap[index].childName}',
+                                                                              style: Theme.of(context).textTheme.headline1,
+                                                                            ),
+                                                                          )
+                                                                        ]),
+                                                                  ),
+                                                                  Align(
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .topRight,
+                                                                    child:
+                                                                        Padding(
+                                                                      padding: EdgeInsets.symmetric(
+                                                                          horizontal:
+                                                                              15.w),
+                                                                      child:
+                                                                          Text(
+                                                                        'العبارة',
+                                                                        style: Theme.of(context)
+                                                                            .textTheme
+                                                                            .headline1,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Align(
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .topRight,
+                                                                    child:
+                                                                        Padding(
+                                                                      padding: EdgeInsets.symmetric(
+                                                                          horizontal:
+                                                                              15.w),
+                                                                      child:
+                                                                          Text(
+                                                                        '${snap[index].message}',
+                                                                        style: Theme.of(context)
+                                                                            .textTheme
+                                                                            .headline5,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Padding(
+                                                                    padding: EdgeInsets.symmetric(
+                                                                        horizontal:
+                                                                            10.w),
+                                                                    child:
+                                                                        Align(
+                                                                      alignment:
+                                                                          Alignment
+                                                                              .topLeft,
+                                                                      child:
+                                                                          TextButton(
+                                                                        onPressed:
+                                                                            () {
+                                                                          Get.off(
+                                                                            AlertDetails(
+                                                                              name: snap[index].childName,
+                                                                              date: snap[index].date,
+                                                                              sender: snap[index].senderName,
+                                                                              content: snap[index].message,
+                                                                              gender: (snap[index].childgender),
+                                                                              isSaved: snap[index].isSaved,
+                                                                              id: snap[index].id,
+                                                                            ),
+                                                                          );
+                                                                        },
+                                                                        child:
+                                                                            Text(
+                                                                          'المزيد',
+                                                                          style:
+                                                                              TextStyle(
+                                                                            color:
+                                                                                Colors.black,
+                                                                            fontSize:
+                                                                                15.sp,
+                                                                            fontFamily:
+                                                                                'FFHekaya',
+                                                                            decoration:
+                                                                                TextDecoration.underline,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  )
+                                                                ],
+                                                              ),
+                                                            )),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              );
+                                            }),
+                                          );
+                                  },
+                                ),
+                              )
+                      ],
                     ),
                     Column(
-                      children: [],
+                      children: [
+                        children.length < 3
+                            ? Padding(
+                                padding: EdgeInsets.symmetric(vertical: 20.h),
+                                child: Center(
+                                    child: Text(
+                                  'لايوجد رسائل',
+                                  style: Theme.of(context).textTheme.headline1,
+                                )),
+                              )
+                            : Expanded(
+                                flex: 1,
+                                child: FutureBuilder(
+                                  future: childMessage(2),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot snapshot) {
+                                    List? snap = snapshot.data;
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return Center(
+                                        child: CircularProgressIndicator(),
+                                      );
+                                    }
+                                    return snap!.isEmpty
+                                        ? Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 20.h),
+                                            child: Text(
+                                              'لايوجد رسائل',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline1,
+                                            ),
+                                          )
+                                        : ListView.builder(
+                                            reverse: false,
+                                            shrinkWrap: true,
+                                            itemCount: snap.length,
+                                            itemBuilder: ((context, index) {
+                                              return Column(
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 20.w,
+                                                            vertical: 10.h),
+                                                    child: SizedBox(
+                                                      height: 170.h,
+                                                      width: 280.w,
+                                                      child: ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(40.r),
+                                                        child: Card(
+                                                            color:
+                                                                Color.fromRGBO(
+                                                                    255,
+                                                                    255,
+                                                                    255,
+                                                                    1),
+                                                            child: ClipRRect(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          20.r),
+                                                              child: Column(
+                                                                children: [
+                                                                  Container(
+                                                                    height:
+                                                                        45.h,
+                                                                    color: Color
+                                                                        .fromRGBO(
+                                                                            237,
+                                                                            236,
+                                                                            242,
+                                                                            1),
+                                                                    child: Row(
+                                                                        children: [
+                                                                          Padding(
+                                                                            padding:
+                                                                                EdgeInsets.symmetric(
+                                                                              horizontal: 10.w,
+                                                                            ),
+                                                                            child: messageList[index].childgender == Gender.Boy
+                                                                                ? Image.asset('images/boyIcon_c.png')
+                                                                                : Image.asset('images/girlIcon_c.png'),
+                                                                          ),
+                                                                          Padding(
+                                                                            padding:
+                                                                                EdgeInsets.symmetric(vertical: 2.h),
+                                                                            child:
+                                                                                Text(
+                                                                              '${snap[index].childName}',
+                                                                              style: Theme.of(context).textTheme.headline1,
+                                                                            ),
+                                                                          )
+                                                                        ]),
+                                                                  ),
+                                                                  Align(
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .topRight,
+                                                                    child:
+                                                                        Padding(
+                                                                      padding: EdgeInsets.symmetric(
+                                                                          horizontal:
+                                                                              15.w),
+                                                                      child:
+                                                                          Text(
+                                                                        'العبارة',
+                                                                        style: Theme.of(context)
+                                                                            .textTheme
+                                                                            .headline1,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Align(
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .topRight,
+                                                                    child:
+                                                                        Padding(
+                                                                      padding: EdgeInsets.symmetric(
+                                                                          horizontal:
+                                                                              15.w),
+                                                                      child:
+                                                                          Text(
+                                                                        '${snap[index].message}',
+                                                                        style: Theme.of(context)
+                                                                            .textTheme
+                                                                            .headline5,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Padding(
+                                                                    padding: EdgeInsets.symmetric(
+                                                                        horizontal:
+                                                                            10.w),
+                                                                    child:
+                                                                        Align(
+                                                                      alignment:
+                                                                          Alignment
+                                                                              .topLeft,
+                                                                      child:
+                                                                          TextButton(
+                                                                        onPressed:
+                                                                            () {
+                                                                          Get.off(
+                                                                            AlertDetails(
+                                                                              name: snap[index].childName,
+                                                                              date: snap[index].date,
+                                                                              sender: snap[index].senderName,
+                                                                              content: snap[index].message,
+                                                                              gender: (snap[index].childgender),
+                                                                              isSaved: snap[index].isSaved,
+                                                                              id: snap[index].id,
+                                                                            ),
+                                                                          );
+                                                                        },
+                                                                        child:
+                                                                            Text(
+                                                                          'المزيد',
+                                                                          style:
+                                                                              TextStyle(
+                                                                            color:
+                                                                                Colors.black,
+                                                                            fontSize:
+                                                                                15.sp,
+                                                                            fontFamily:
+                                                                                'FFHekaya',
+                                                                            decoration:
+                                                                                TextDecoration.underline,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  )
+                                                                ],
+                                                              ),
+                                                            )),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              );
+                                            }),
+                                          );
+                                  },
+                                ),
+                              )
+                      ],
                     ),
                   ],
                 ))

@@ -30,69 +30,46 @@ Crud _crud = Crud();
 List msgidi = [];
 int msgSaved = 0;
 List msgchild = [];
-bool msg = false;
-messages() async {
-  List response = await _crud.getRequest(linkAllMessages);
-  for (int i = 0; i < response.length; i++) {
-    if (response[i]['parent_id'].toString() ==
-        sharedPref.getString('parent_id')) {
-      msgidi.add(response[i]['msg_id']);
-      msgchild.add(response[i]['child_name']);
-      msg = true;
-    } else {}
-  }
-  if (msg == true) {
-    allMessages();
-  }
-}
 
+bool msg = false;
 List<Message> messageList = [];
 
-int msgNumber = 0;
-allMessages() async {
+messages() async {
   messageList = [];
-
-  print(msgidi.toString());
-  print(msgchild.toString());
-
-  for (int i = 0; i < msgidi.length; i++) {
-    var response = await _crud.postRequest(linkAlertHistory, {
-      'msg_id': (msgidi[i].toString()),
-    });
-
-    print("response.toString() : ${response[0]["statues"].toString()}");
-
-    if (response != null && response[0]["statues"] == "success") {
+  List response = await _crud.postRequest2(linkAlertHistory, {
+    'parent_id': sharedPref.getString('parent_id'),
+  });
+  if (response != null && response[0]["statues"] == "success") {
+    for (int i = 0; i < response.length; i++) {
       var responseChild = await _crud.postRequest2(linkChild, {
-        'child_name': msgchild[i].toString(),
+        'child_name': response[i]["child_name"],
         'parent_id': sharedPref.getString('parent_id'),
       });
-      print(responseChild.toString());
+      print('responceChild: ${responseChild.toString()}');
       if (responseChild != null && responseChild[0]['statues'] == "success") {
-        // AsyncSnapshot snap = responseChild;
-        print(response.toString());
-        // response = jsonEncode(response.toString());
-        print(responseChild[0]['gender']);
+        msg = true;
         messageList.add(
           Message(
-              id: int.parse(msgidi[i].toString()),
-              childName: msgchild[i],
+              id: int.parse(response[i]['msg_id']),
+              childName: responseChild[0]['child_name'],
               childgender: getGender(responseChild[0]['gender']),
-              message: response[0]['content'],
-              date: response[0]['date_time'].toString(),
-              senderName: response[0]['sender'],
-              isSaved: true),
+              message: response[i]['content'],
+              date: response[i]['date_time'].toString(),
+              senderName: response[i]['sender'],
+              isSaved: false),
         );
         msgNumber++;
-        print("messageList.length : ${messageList.length}");
       } else {
         print('Child fail');
       }
-    } else {
-      print('Msg fail');
     }
+  } else {
+    print('Msg fail');
   }
+  return messageList;
 }
+
+int msgNumber = 0;
 
 class AlertHistory extends StatefulWidget {
   @override
@@ -102,9 +79,7 @@ class AlertHistory extends StatefulWidget {
 class _AlertHistoryState extends State<AlertHistory> {
   @override
   void initState() {
-    msgidi = [];
-    msgchild = [];
-    messages();
+    messageList = [];
     super.initState();
   }
 
@@ -181,136 +156,164 @@ class _AlertHistoryState extends State<AlertHistory> {
             }
             //selectedIndex = index;
           }),
-      body: Column(children: [
-        Text(
-          'سجل التنبيهات',
-          style: Theme.of(context).textTheme.headline1,
-        ),
-        Expanded(
-          flex: 1,
-          child: ListView.builder(
-            reverse: false,
-            shrinkWrap: true,
-            itemCount: messageList.length,
-            itemBuilder: ((context, index) {
-              return Column(
-                children: [
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-                    child: SizedBox(
-                      height: 170.h,
-                      width: 280.w,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(40.r),
-                        child: Card(
-                            color: Color.fromRGBO(255, 255, 255, 1),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20.r),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    height: 45.h,
-                                    color: Color.fromRGBO(237, 236, 242, 1),
-                                    child: Row(children: [
-                                      Padding(
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: 10.w,
-                                        ),
-                                        child: messageList[index].childgender ==
-                                                Gender.Boy
-                                            ? Image.asset(
-                                                'images/boyIcon_c.png')
-                                            : Image.asset(
-                                                'images/girlIcon_c.png'),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.symmetric(vertical: 2.h),
-                                        child: Text(
-                                          '${messageList[index].childName}',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline1,
-                                        ),
-                                      )
-                                    ]),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.topRight,
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 15.w),
-                                      child: Text(
-                                        'العبارة',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline1,
-                                      ),
-                                    ),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.topRight,
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 15.w),
-                                      child: Text(
-                                        '${messageList[index].message}',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline5,
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 10.w),
-                                    child: Align(
-                                      alignment: Alignment.topLeft,
-                                      child: TextButton(
-                                        onPressed: () {
-                                          Get.off(
-                                            AlertDetails(
-                                              name:
-                                                  messageList[index].childName,
-                                              date: messageList[index].date,
-                                              sender:
-                                                  messageList[index].senderName,
-                                              content:
-                                                  messageList[index].message,
-                                              gender: (messageList[index]
-                                                  .childgender),
-                                              isSaved:
-                                                  messageList[index].isSaved,
-                                              id: messageList[index].id,
-                                            ),
-                                          );
-                                        },
-                                        child: Text(
-                                          'المزيد',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 15.sp,
-                                            fontFamily: 'FFHekaya',
-                                            decoration:
-                                                TextDecoration.underline,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            )),
-                      ),
-                    ),
-                  ),
-                ],
-              );
-            }),
+      body: Center(
+        child: Column(children: [
+          Text(
+            'سجل التنبيهات',
+            style: Theme.of(context).textTheme.headline1,
           ),
-        ),
-      ]),
+          Expanded(
+            flex: 1,
+            child: FutureBuilder(
+              future: messages(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                List? snap = snapshot.data;
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                return snap!.isEmpty
+                    ? Padding(
+                        padding: EdgeInsets.symmetric(vertical: 20.h),
+                        child: Text(
+                          'لاتوجد رسائل محفوظة',
+                          style: Theme.of(context).textTheme.headline1,
+                        ),
+                      )
+                    : ListView.builder(
+                        reverse: false,
+                        shrinkWrap: true,
+                        itemCount: snap.length,
+                        itemBuilder: ((context, index) {
+                          return Column(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 20.w, vertical: 10.h),
+                                child: SizedBox(
+                                  height: 170.h,
+                                  width: 280.w,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(40.r),
+                                    child: Card(
+                                        color: Color.fromRGBO(255, 255, 255, 1),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(20.r),
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                height: 45.h,
+                                                color: Color.fromRGBO(
+                                                    237, 236, 242, 1),
+                                                child: Row(children: [
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                      horizontal: 10.w,
+                                                    ),
+                                                    child: snap[index]
+                                                                .childgender ==
+                                                            Gender.Boy
+                                                        ? Image.asset(
+                                                            'images/boyIcon_c.png')
+                                                        : Image.asset(
+                                                            'images/girlIcon_c.png'),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 2.h),
+                                                    child: Text(
+                                                      '${snap[index].childName}',
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .headline1,
+                                                    ),
+                                                  )
+                                                ]),
+                                              ),
+                                              Align(
+                                                alignment: Alignment.topRight,
+                                                child: Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 15.w),
+                                                  child: Text(
+                                                    'العبارة',
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .headline1,
+                                                  ),
+                                                ),
+                                              ),
+                                              Align(
+                                                alignment: Alignment.topRight,
+                                                child: Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 15.w),
+                                                  child: Text(
+                                                    '${snap[index].message}',
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .headline5,
+                                                  ),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 10.w),
+                                                child: Align(
+                                                  alignment: Alignment.topLeft,
+                                                  child: TextButton(
+                                                    onPressed: () {
+                                                      Get.off(
+                                                        AlertDetails(
+                                                          name: snap[index]
+                                                              .childName,
+                                                          date:
+                                                              snap[index].date,
+                                                          sender: snap[index]
+                                                              .senderName,
+                                                          content: snap[index]
+                                                              .message,
+                                                          gender: (snap[index]
+                                                              .childgender),
+                                                          isSaved: snap[index]
+                                                              .isSaved,
+                                                          id: snap[index].id,
+                                                        ),
+                                                      );
+                                                    },
+                                                    child: Text(
+                                                      'المزيد',
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 15.sp,
+                                                        fontFamily: 'FFHekaya',
+                                                        decoration:
+                                                            TextDecoration
+                                                                .underline,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        )),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        }),
+                      );
+              },
+            ),
+          )
+        ]),
+      ),
     );
   }
 }

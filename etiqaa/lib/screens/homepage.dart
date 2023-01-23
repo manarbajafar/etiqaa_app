@@ -16,10 +16,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Widget get isHasChild {
-    print(
-        "sharedPref.getInt('childrenNum') ${sharedPref.getInt('childrenNum')}");
-    print(
-        "sharedPref.getString('parent_id'): ${sharedPref.getString('parent_id')}");
+    // print(
+    //     "sharedPref.getInt('childrenNum') ${sharedPref.getInt('childrenNum')}");
+    // print(
+    //     "sharedPref.getString('parent_id'): ${sharedPref.getString('parent_id')}");
     if (sharedPref.getInt('childrenNum') == 0) {
       return NoChildren();
     } else {

@@ -48,7 +48,7 @@ class _addChildState extends State<addChild> with Crud {
       var response = await postRequest2(linkAddChild, {
         "child_name": controller.name.text,
         "gender": getGender(controller.gender),
-        "date_of_birth": DateFormat('yyyy-MM-dd').format(pickedDate!),
+        "date_of_birth": (controller.date.text),
         "parent_id": sharedPref.getString('parent_id'),
       });
       print(response.toString());
