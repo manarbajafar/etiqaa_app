@@ -13,7 +13,15 @@ from flask import Flask,jsonify,request
 from flask_cors import CORS
 import json
 
+#for DB
+import mysql.connector
 
+mydb = mysql.connector.connect(
+  host="localhost",
+  user="root",
+  password="",
+  database="etiqaa"
+)
 
 app = Flask(__name__) #intance of our flask application 
 
@@ -85,8 +93,11 @@ def index():
 
   request_data = request.data #getting the response data
   request_data = json.loads(request_data.decode('utf-8')) #converting it from json to key value pair
-  text = request_data['message'] #assigning it to name
- 
+  text = request_data['content'] #assigning it to name
+  sender = request_data['sender']
+  date_time = request_data['date_time']
+  parent_id = request_data['parent_id']
+  child_name = request_data['child_name']
 
   cleanedText = cleaning(text)
   print(cleanedText)
@@ -102,9 +113,33 @@ def index():
 
   result = str(predictedClass[0])
 
+  ######
+  # here If it is inappropriate, store it in the data base
 
-  return jsonify({'message' : result}) #returning key-value pair in json format
+  if (result == 'NOT_APROP'):
+    mycursor = mydb.cursor()
 
+  #this for new db
+  # sql = "INSERT INTO whats_app_message (parent_id, child_name, date_time, sender, content, msg_id) VALUES (%s, %s, %s, %s, %s,(SELECT max(msg_id) FROM whats_app_message WHERE parent_id = %s AND child_name = %s) + 1)"
+  # val = ("John", "Highway 21","",""," ","")
+  # mycursor.execute(sql, val)
+
+    sql = "INSERT INTO whats_app_message ( date_time, sender, content) VALUES (%s, %s, %s)"
+    val = (date_time, sender,text)
+    mycursor.execute(sql, val)
+
+    msg_id= mycursor.lastrowid
+
+    if(msg_id != None):
+      sql = "INSERT INTO message_child_parent (msg_id, parent_id, child_name) VALUES (%s, %s, %s)"
+      val = (msg_id, parent_id,child_name)
+      mycursor.execute(sql, val)
+
+    mydb.commit()
+    return jsonify({'label' : result})
+  ######
+  return jsonify({'label' : 'APROP'}) #returning key-value pair in json format
+  
 
 url='192.168.8.102'
 # url='http://10.0.2.2'

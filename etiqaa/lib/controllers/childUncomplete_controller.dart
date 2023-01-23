@@ -16,7 +16,6 @@ class ChildUncompleteController extends GetxController {
   bool started = false;
   bool _loading = false;
   bool flag = false;
-
   ReceivePort port = ReceivePort();
 
   Crud crud = Crud();
@@ -82,12 +81,7 @@ class ChildUncompleteController extends GetxController {
     // print(event.title); //SENDER NUMBER: OR HEADER
 
     if (event.packageName == 'com.whatsapp' && event.id != 0) {
-      String label = await getMsgLabel(event.text.toString());
-      print("after getMsgLabel(): ${label}");
-
-      if (label == 'NOT_APROP') {
-        storeMsg(event); // I will make it from Python
-      }
+      await processMsg(event);
     }
   }
 
@@ -131,19 +125,29 @@ class ChildUncompleteController extends GetxController {
     update();
   }
 
-  Future<String> getMsgLabel(String text) async {
+  Future<void> processMsg(NotificationEvent msg) async {
     //url to send the post request to
     final url = myServerUrl;
     // print(text);
     //sending a post request to the url
-    final response =
-        await http.post(Uri.parse(url), body: json.encode({'message': text}));
+    final response = await http.post(Uri.parse(url),
+        body: json.encode({
+          'content': msg.text,
+          "sender": msg.title.toString(),
+          "date_time": msg.createAt.toString().substring(0, 19).toString(),
+          "parent_id": sharedPref.getString('parent_id'),
+          "child_name": name,
+        }));
 
     //converting the fetched data from json to key value pair that can be displayed on the screen
     final decoded = json.decode(response.body) as Map<String, dynamic>;
 
-    //changing the UI be reassigning the fetched data to final response{
-    return decoded['message'];
+    //this for tharaa :)
+    String label = decoded['label'];
+    if (label == 'NOT_APROP') {
+      //Here take the same msg information (line 134 - 138) and deal with it
+      print("label is $label");
+    }
   }
 
   void storeMsg(NotificationEvent msg) async {
@@ -168,7 +172,6 @@ class ChildUncompleteController extends GetxController {
     });
     isLoading = false;
     if (response != null && response["status"] != "fail") {
-      childActivate();
       backbutton = false;
       isActive = 1;
       update();
@@ -176,6 +179,4 @@ class ChildUncompleteController extends GetxController {
       print("activate fail");
     }
   }
-
-  void childActivate() {}
 }
