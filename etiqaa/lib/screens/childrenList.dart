@@ -33,7 +33,7 @@ class _ChildrenListState extends State<ChildrenList> {
     super.initState();
   }
 
-  Future childrenList() async {
+  childrenList() async {
     return await _crud.getRequest(linkChildrenList);
   }
 
