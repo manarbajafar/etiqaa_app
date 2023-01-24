@@ -99,56 +99,73 @@ class _ConnectWithUsState extends State<ConnectWithUs> {
           }),
       body: Padding(
         padding: EdgeInsets.symmetric(vertical: 30.h),
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.w),
-              child: ElevatedButton(
-                onPressed: () {
-                  lanchEmail();
-                },
-                child: Card(
-                  color: Color.fromRGBO(237, 236, 242, 1),
-                  child: ListTile(
-                    leading: Icon(
-                      Icons.mail,
-                      color: Colors.black,
-                    ),
-                    title: Center(
-                      child: Text(
-                        'EtiqaaApp@gmail.com',
-                        style: TextStyle(
-                            fontSize: 14.sp, fontWeight: FontWeight.bold),
+        child: Center(
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                child: SizedBox(
+                  width: 300.w,
+                  child: Card(
+                    color: Color.fromRGBO(237, 236, 242, 1),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color.fromRGBO(237, 236, 242, 1),
+                      ),
+                      onPressed: () {
+                        lanchEmail();
+                      },
+                      child: ListTile(
+                        leading: Icon(
+                          Icons.mail,
+                          color: Colors.black,
+                        ),
+                        title: Center(
+                          child: Text(
+                            'EtiqaaApp@gmail.com',
+                            style: TextStyle(
+                                fontSize: 14.sp, fontWeight: FontWeight.bold),
+                          ),
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 20.h,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.w),
-              child: Card(
-                color: Color.fromRGBO(237, 236, 242, 1),
-                child: ListTile(
-                  leading: Image.asset(
-                    'images/twitter.png',
-                    height: 25.w,
-                    width: 25.w,
-                  ),
-                  title: Center(
-                    child: Text(
-                      'etiqaa_App@',
-                      style: TextStyle(
-                          fontSize: 14.sp, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
+              SizedBox(
+                height: 20.h,
               ),
-            ),
-          ],
+              Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20.w),
+                  child: SizedBox(
+                    width: 300.w,
+                    child: Card(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color.fromRGBO(237, 236, 242, 1),
+                        ),
+                        onPressed: () {
+                          lanchTwitter();
+                        },
+                        child: ListTile(
+                          leading: Image.asset(
+                            'images/twitter.png',
+                            height: 25.h,
+                            width: 25.w,
+                          ),
+                          title: Center(
+                            child: Text(
+                              '@EtiqaaApp',
+                              style: TextStyle(
+                                  fontSize: 14.sp, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  )),
+            ],
+          ),
         ),
       ),
     );
@@ -157,6 +174,15 @@ class _ConnectWithUsState extends State<ConnectWithUs> {
 
 lanchEmail() async {
   final url = 'mailto:EtiqaaApp@gmail.com?sublect=' '';
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    print('Send fail');
+  }
+}
+
+lanchTwitter() async {
+  final url = 'https://twitter.com/EtiqaaApp';
   if (await canLaunch(url)) {
     await launch(url);
   } else {
