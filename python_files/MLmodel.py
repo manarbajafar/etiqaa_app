@@ -124,7 +124,11 @@ def index():
     val1 = (parent_id, child_name)
     mycursor.execute(sql1, val1)
     result=mycursor.fetchone()
-    msg_id=int(result[0])
+    if(result[0] is None):
+      msg_id=0
+    else:
+      msg_id=int(result[0])
+      
 
     sql = "INSERT INTO whats_app_message (parent_id, child_name, date_time, sender, content, msg_id) VALUES (%s, %s, %s, %s, %s,%s)"
     val = (parent_id, child_name, date_time, sender, text, msg_id +1)
