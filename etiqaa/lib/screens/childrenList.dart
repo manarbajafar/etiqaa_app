@@ -31,6 +31,8 @@ class _ChildrenListState extends State<ChildrenList> {
 
   void initState() {
     super.initState();
+    print(
+        "sharedPref.getInt('childrenNum'): ${sharedPref.getInt('childrenNum')}");
   }
 
   childrenList() async {

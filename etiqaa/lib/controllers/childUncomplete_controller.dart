@@ -38,9 +38,9 @@ class ChildUncompleteController extends GetxController {
   // we must use static method, to handle in background
   static void _callback(NotificationEvent evt) {
     // HANDLING BACKGROUND NOTIFICATIONS :
-    // print('GETTING INFO ');
+    print('GETTING INFO FROM BACKGROUND');
     // print(evt.packageName); // PACKAGE USE TO SEND MESSAGE :
-    // print(evt.text); // MESSAGE CONTENT  :
+    print(evt.text); // MESSAGE CONTENT  :
     // print(evt.title); //SENDER NUMBER: OR HEADER
 
     final SendPort? send = IsolateNameServer.lookupPortByName("_listener_");
@@ -75,9 +75,9 @@ class ChildUncompleteController extends GetxController {
       // TODO: fix bug
       // NotificationsListener.promoteToForeground("");
     }
-    // print('GETTING INFO FRONT APP ');
+    print('GETTING INFO FRONT APP ');
     // print(event.packageName); // PACKAGE USE TO SEND MESSAGE :
-    // print(event.text); // MESSAGE CONTENT  :
+    print(event.text); // MESSAGE CONTENT  :
     // print(event.title); //SENDER NUMBER: OR HEADER
 
     if (event.packageName == 'com.whatsapp' && event.id != 0) {
@@ -102,7 +102,9 @@ class ChildUncompleteController extends GetxController {
 
     if (isR == false) {
       await NotificationsListener.startService(
-          title: "we still with you ", description: "payai from feelsafe");
+          title: "we still with you ",
+          description: "payai from feelsafe",
+          foreground: false);
     }
     //if he agree
     flag = true;

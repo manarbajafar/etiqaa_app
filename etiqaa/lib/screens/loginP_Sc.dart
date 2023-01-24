@@ -43,7 +43,7 @@ class _LoginPSc extends State<LoginPSc> {
           sharedPref.setString(
               'parent_id', response['data']['parent_id'].toString());
           var snap = await _crud.getRequest(linkChildrenList);
-          if (snap == []) {
+          if (snap != []) {
             for (int i = 0; i < snap.length; i++) {
               if (snap[i]['parent_id'].toString() ==
                   sharedPref.getString('parent_id')) {
