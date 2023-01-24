@@ -2,6 +2,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../widgets/curvedAppbar.dart';
 import 'accountSettings.dart';
 import 'advice.dart';
@@ -102,18 +103,23 @@ class _ConnectWithUsState extends State<ConnectWithUs> {
           children: [
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w),
-              child: Card(
-                color: Color.fromRGBO(237, 236, 242, 1),
-                child: ListTile(
-                  leading: Icon(
-                    Icons.mail,
-                    color: Colors.black,
-                  ),
-                  title: Center(
-                    child: Text(
-                      'EtiqaaApp@gmail.com',
-                      style: TextStyle(
-                          fontSize: 14.sp, fontWeight: FontWeight.bold),
+              child: ElevatedButton(
+                onPressed: () {
+                  lanchEmail();
+                },
+                child: Card(
+                  color: Color.fromRGBO(237, 236, 242, 1),
+                  child: ListTile(
+                    leading: Icon(
+                      Icons.mail,
+                      color: Colors.black,
+                    ),
+                    title: Center(
+                      child: Text(
+                        'EtiqaaApp@gmail.com',
+                        style: TextStyle(
+                            fontSize: 14.sp, fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
                 ),
@@ -146,5 +152,14 @@ class _ConnectWithUsState extends State<ConnectWithUs> {
         ),
       ),
     );
+  }
+}
+
+lanchEmail() async {
+  final url = 'mailto:EtiqaaApp@gmail.com?sublect=' '';
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    print('Send fail');
   }
 }

@@ -27,10 +27,6 @@ Gender getGender(String gender) {
 
 Crud _crud = Crud();
 
-List msgidi = [];
-int msgSaved = 0;
-List msgchild = [];
-
 bool msg = false;
 List<Message> messageList = [];
 
@@ -58,7 +54,6 @@ messages() async {
               senderName: response[i]['sender'],
               isSaved: false),
         );
-        msgNumber++;
       } else {
         print('Child fail');
       }
@@ -68,8 +63,6 @@ messages() async {
   }
   return messageList;
 }
-
-int msgNumber = 0;
 
 class AlertHistory extends StatefulWidget {
   @override
@@ -253,7 +246,14 @@ class _AlertHistoryState extends State<AlertHistory> {
                                                   padding: EdgeInsets.symmetric(
                                                       horizontal: 15.w),
                                                   child: Text(
-                                                    '${snap[index].message}',
+                                                    snap[index].message.length >
+                                                            40
+                                                        ? snap[index]
+                                                                .message
+                                                                .substring(
+                                                                    0, 40) +
+                                                            '.....'
+                                                        : snap[index].message,
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .headline5,
