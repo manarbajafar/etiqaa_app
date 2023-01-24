@@ -279,8 +279,7 @@ class _AlertHistoryState extends State<AlertHistory> {
                                                               .message,
                                                           gender: (snap[index]
                                                               .childgender),
-                                                          isSaved: snap[index]
-                                                              .isSaved,
+                                                          isSaved: true,
                                                           id: snap[index].id,
                                                         ),
                                                       );
