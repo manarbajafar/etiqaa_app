@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:etiqaa/database/crud.dart';
 import 'package:etiqaa/database/linkApi.dart';
 import 'package:etiqaa/main.dart';
@@ -257,13 +259,14 @@ deleteMessage() async {
 }
 
 saveMessage() async {
+  print(
+      "sharedPref.getString('parent_id') : ${sharedPref.getString('parent_id')}");
   var response = await _crud.postRequest2(linkSaveMessage, {
     'msg_id': idM.toString(),
     'parent_id': sharedPref.getString('parent_id'),
     'child_name': childName,
   });
 
-  // response = jsonDecode(response.toString());
   print(response.toString());
   if (response != null && response["statues"] == "success") {
     save = true;

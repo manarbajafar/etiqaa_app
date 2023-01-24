@@ -32,7 +32,7 @@ List<Message> messageList = [];
 
 messages() async {
   messageList = [];
-  List response = await _crud.postRequest2(linkAlertHistory, {
+  var response = await _crud.postRequest2(linkAlertHistory, {
     'parent_id': sharedPref.getString('parent_id'),
   });
   if (response != null && response[0]["statues"] == "success") {
