@@ -48,7 +48,7 @@ class _MessagesCardsState extends State<MessagesCards>
   bool msg = false;
   messages() async {
     messageList = [];
-    List response = await _crud.postRequest2(linkWhatsAppMessages, {
+    var response = await _crud.postRequest2(linkWhatsAppMessages, {
       'parent_id': sharedPref.getString('parent_id'),
     });
     if (response != null && response[0]["statues"] == "success") {
@@ -280,7 +280,7 @@ class _MessagesCardsState extends State<MessagesCards>
                                         padding: EdgeInsets.symmetric(
                                             horizontal: 20.w, vertical: 10.h),
                                         child: SizedBox(
-                                          height: 170.h,
+                                          height: 180.h,
                                           width: 280.w,
                                           child: ClipRRect(
                                             borderRadius:
