@@ -160,12 +160,14 @@ class AlertDetails extends StatelessWidget {
                   Align(
                     alignment: Alignment.topRight,
                     child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 25.w),
-                      child: Text(
-                        '$content',
-                        style: Theme.of(context).textTheme.headline5,
-                      ),
-                    ),
+                        padding: EdgeInsets.symmetric(horizontal: 25.w),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          child: Text(
+                            '$content',
+                            style: Theme.of(context).textTheme.headline5,
+                          ),
+                        )),
                   ),
                   save == false
                       ? Column(

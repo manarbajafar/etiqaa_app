@@ -14,8 +14,6 @@ import '../screens/addChild.dart';
 import '../screens/alertDetails.dart';
 
 class MessagesCards extends StatefulWidget {
-  //const MessagesCards({super.key});
-
   @override
   State<MessagesCards> createState() => _MessagesCardsState();
 }
@@ -47,11 +45,6 @@ class _MessagesCardsState extends State<MessagesCards>
 
   Crud _crud = Crud();
 
-  List msgid = [];
-  int msgSaved = 0;
-  List msgchild = [];
-
-  int msgNumber = 0;
   bool msg = false;
   messages() async {
     messageList = [];
@@ -65,7 +58,6 @@ class _MessagesCardsState extends State<MessagesCards>
           'child_name': response[i]["child_name"],
           'parent_id': sharedPref.getString('parent_id'),
         });
-        print('responceChild: ${responseChild.toString()}');
         if (responseChild != null && responseChild[0]['statues'] == "success") {
           messageList.add(
             Message(
@@ -77,7 +69,6 @@ class _MessagesCardsState extends State<MessagesCards>
                 senderName: response[i]['sender'],
                 isSaved: false),
           );
-          msgNumber++;
         } else {
           print('Child fail');
         }
@@ -117,7 +108,6 @@ class _MessagesCardsState extends State<MessagesCards>
         });
         if (responseChild != null && responseChild[0]['statues'] == "success") {
           if (response[i]['child_name'] == children[index]) {
-            print('${children[index]}=> ${responseChild[0]['gender']}');
             childList.add(
               Message(
                   id: int.parse(response[i]['msg_id']),
@@ -363,7 +353,18 @@ class _MessagesCardsState extends State<MessagesCards>
                                                                   horizontal:
                                                                       15.w),
                                                           child: Text(
-                                                            '${snap[index].message}',
+                                                            snap[index]
+                                                                        .message
+                                                                        .length >
+                                                                    15
+                                                                ? snap[index]
+                                                                        .message
+                                                                        .substring(
+                                                                            0,
+                                                                            15) +
+                                                                    '.....'
+                                                                : snap[index]
+                                                                    .message,
                                                             style: Theme.of(
                                                                     context)
                                                                 .textTheme
@@ -461,6 +462,7 @@ class _MessagesCardsState extends State<MessagesCards>
                                       child: CircularProgressIndicator(),
                                     );
                                   }
+
                                   return snap!.isEmpty
                                       ? Padding(
                                           padding: EdgeInsets.symmetric(
@@ -477,6 +479,8 @@ class _MessagesCardsState extends State<MessagesCards>
                                           shrinkWrap: true,
                                           itemCount: snap.length,
                                           itemBuilder: ((context, index) {
+                                            print(
+                                                'snap[index].message.length: ${snap[index].message.length}');
                                             return Column(
                                               children: [
                                                 Padding(
@@ -560,7 +564,11 @@ class _MessagesCardsState extends State<MessagesCards>
                                                                         horizontal:
                                                                             15.w),
                                                                     child: Text(
-                                                                      '${snap[index].message}',
+                                                                      snap[index].message.length > 10
+                                                                          ? snap[index].message.substring(0, 10) +
+                                                                              '.....'
+                                                                          : snap[index]
+                                                                              .message,
                                                                       style: Theme.of(
                                                                               context)
                                                                           .textTheme
@@ -759,7 +767,10 @@ class _MessagesCardsState extends State<MessagesCards>
                                                                               15.w),
                                                                       child:
                                                                           Text(
-                                                                        '${snap[index].message}',
+                                                                        snap[index].message.length > 15
+                                                                            ? snap[index].message.substring(0, 15) +
+                                                                                '.....'
+                                                                            : snap[index].message,
                                                                         style: Theme.of(context)
                                                                             .textTheme
                                                                             .headline5,
@@ -952,7 +963,10 @@ class _MessagesCardsState extends State<MessagesCards>
                                                                               15.w),
                                                                       child:
                                                                           Text(
-                                                                        '${snap[index].message}',
+                                                                        snap[index].message.length > 15
+                                                                            ? snap[index].message.substring(0, 15) +
+                                                                                '.....'
+                                                                            : snap[index].message,
                                                                         style: Theme.of(context)
                                                                             .textTheme
                                                                             .headline5,
