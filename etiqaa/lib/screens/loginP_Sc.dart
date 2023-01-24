@@ -42,12 +42,16 @@ class _LoginPSc extends State<LoginPSc> {
         if (response["status"] == "success") {
           sharedPref.setString(
               'parent_id', response['data']['parent_id'].toString());
-          List snap = await _crud.getRequest(linkChildrenList);
-          for (int i = 0; i < snap.length; i++) {
-            if (snap[i]['parent_id'].toString() ==
-                sharedPref.getString('parent_id')) {
-              childrenNum++;
+          var snap = await _crud.getRequest(linkChildrenList);
+          if (snap == []) {
+            for (int i = 0; i < snap.length; i++) {
+              if (snap[i]['parent_id'].toString() ==
+                  sharedPref.getString('parent_id')) {
+                childrenNum++;
+              }
+              sharedPref.setInt('childrenNum', childrenNum);
             }
+          } else {
             sharedPref.setInt('childrenNum', childrenNum);
           }
           controller.toHomePage();
@@ -216,7 +220,8 @@ class _LoginPSc extends State<LoginPSc> {
                               backgroundColor: Theme.of(context).buttonColor,
                             ),
                             onPressed: () {
-                              print(sharedPref.getString('parent_id'));
+                              print(
+                                  "sharedPref.getString('parent_id') in line 221 : ${sharedPref.getString('parent_id')}");
                               loginp();
                             },
                             child: Text(
