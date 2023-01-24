@@ -117,23 +117,19 @@ def index():
   # here If it is inappropriate, store it in the data base
 
   if (result == 'NOT_APROP'):
-    mycursor = mydb.cursor()
+    mycursor = mydb.cursor(buffered=True)
 
-  #this for new db
-  # sql = "INSERT INTO whats_app_message (parent_id, child_name, date_time, sender, content, msg_id) VALUES (%s, %s, %s, %s, %s,(SELECT max(msg_id) FROM whats_app_message WHERE parent_id = %s AND child_name = %s) + 1)"
-  # val = ("John", "Highway 21","",""," ","")
-  # mycursor.execute(sql, val)
 
-    sql = "INSERT INTO whats_app_message ( date_time, sender, content) VALUES (%s, %s, %s)"
-    val = (date_time, sender,text)
+    sql1="SELECT max(msg_id) FROM whats_app_message WHERE parent_id = %s AND child_name = %s"
+    val1 = (parent_id, child_name)
+    mycursor.execute(sql1, val1)
+    result=mycursor.fetchone()
+    msg_id=int(result[0])
+
+    sql = "INSERT INTO whats_app_message (parent_id, child_name, date_time, sender, content, msg_id) VALUES (%s, %s, %s, %s, %s,%s)"
+    val = (parent_id, child_name, date_time, sender, text, msg_id +1)
     mycursor.execute(sql, val)
 
-    msg_id= mycursor.lastrowid
-
-    if(msg_id != None):
-      sql = "INSERT INTO message_child_parent (msg_id, parent_id, child_name) VALUES (%s, %s, %s)"
-      val = (msg_id, parent_id,child_name)
-      mycursor.execute(sql, val)
 
     mydb.commit()
     return jsonify({'label' : result})
@@ -141,8 +137,8 @@ def index():
   return jsonify({'label' : 'APROP'}) #returning key-value pair in json format
   
  
-url='192.168.1.13'
-# url='192.168.8.102'
+# url='192.168.1.13'
+url='192.168.8.102'
 # url='http://10.0.2.2'
 # url='127.0.0.1'
 
