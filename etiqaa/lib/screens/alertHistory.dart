@@ -35,6 +35,7 @@ messages() async {
   var response = await _crud.postRequest2(linkAlertHistory, {
     'parent_id': sharedPref.getString('parent_id'),
   });
+  // print('response line 38: ${response.toString()}');
   if (response != null && response[0]["statues"] == "success") {
     for (int i = 0; i < response.length; i++) {
       var responseChild = await _crud.postRequest2(linkChild, {
@@ -43,10 +44,11 @@ messages() async {
       });
       print('responceChild: ${responseChild.toString()}');
       if (responseChild != null && responseChild[0]['statues'] == "success") {
+        // print('id : ${response[i]['msg_id']}');
         msg = true;
         messageList.add(
           Message(
-              id: int.parse(response[i]['msg_id']),
+              id: response[i]['msg_id'],
               childName: responseChild[0]['child_name'],
               childgender: getGender(responseChild[0]['gender']),
               message: response[i]['content'],
@@ -54,6 +56,7 @@ messages() async {
               senderName: response[i]['sender'],
               isSaved: false),
         );
+        print('messageList line 58: ${messageList.toString()}');
       } else {
         print('Child fail');
       }
