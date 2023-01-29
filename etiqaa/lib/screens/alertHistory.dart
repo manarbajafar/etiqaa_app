@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:etiqaa/widgets/messagesCards.dart';
 import 'package:flutter/material.dart';
@@ -35,20 +37,20 @@ messages() async {
   var response = await _crud.postRequest2(linkAlertHistory, {
     'parent_id': sharedPref.getString('parent_id'),
   });
-  // print('response line 38: ${response.toString()}');
+  // print('response line 40: ${response.toString()}');
   if (response != null && response[0]["statues"] == "success") {
     for (int i = 0; i < response.length; i++) {
       var responseChild = await _crud.postRequest2(linkChild, {
         'child_name': response[i]["child_name"],
         'parent_id': sharedPref.getString('parent_id'),
       });
-      print('responceChild: ${responseChild.toString()}');
+      // print('responceChild: ${responseChild.toString()}');
       if (responseChild != null && responseChild[0]['statues'] == "success") {
         // print('id : ${response[i]['msg_id']}');
         msg = true;
         messageList.add(
           Message(
-              id: response[i]['msg_id'],
+              id: (response[i]['msg_id']),
               childName: responseChild[0]['child_name'],
               childgender: getGender(responseChild[0]['gender']),
               message: response[i]['content'],
@@ -188,7 +190,7 @@ class _AlertHistoryState extends State<AlertHistory> {
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 20.w, vertical: 10.h),
                                 child: SizedBox(
-                                  height: 170.h,
+                                  height: 180.h,
                                   width: 280.w,
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(40.r),
@@ -249,14 +251,19 @@ class _AlertHistoryState extends State<AlertHistory> {
                                                   padding: EdgeInsets.symmetric(
                                                       horizontal: 15.w),
                                                   child: Text(
-                                                    snap[index].message.length >
+                                                    replaceLine(snap[index]
+                                                                    .message)
+                                                                .length >
                                                             40
-                                                        ? snap[index]
-                                                                .message
+                                                        ? replaceLine(snap[
+                                                                        index]
+                                                                    .message)
                                                                 .substring(
                                                                     0, 40) +
                                                             '.....'
-                                                        : snap[index].message,
+                                                        : replaceLine(
+                                                            snap[index]
+                                                                .message),
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .headline5,
@@ -317,5 +324,15 @@ class _AlertHistoryState extends State<AlertHistory> {
         ]),
       ),
     );
+  }
+
+  replaceLine(String msg) {
+    const splitter = LineSplitter();
+    final msgSplit = splitter.convert(msg);
+    msg = ' ';
+    for (var i = 0; i < msgSplit.length; i++) {
+      msg = msg + ' ${msgSplit[i]}';
+    }
+    return msg;
   }
 }

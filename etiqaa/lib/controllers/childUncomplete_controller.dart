@@ -27,7 +27,8 @@ class ChildUncompleteController extends GetxController {
   int? isActive;
   String? gender;
 
-  final myServerUrl = 'http://192.168.8.102:5000/';
+  // final myServerUrl = 'http://192.168.8.102:5000/';
+  final myServerUrl = 'http://192.168.1.13:5000/'; //maram
 
   @override
   void onInit() {
