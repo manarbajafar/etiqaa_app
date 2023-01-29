@@ -138,12 +138,11 @@ def index():
     mydb.commit()
     return jsonify({'label' : result})
   ######
-  return jsonify({'label' : 'APROP'}) #returning key-value pair in json format
+  return jsonify({'label' : result}) #returning key-value pair in json format
   
  
-# url='192.168.1.13'
+
 url='192.168.8.102'
-# url='http://10.0.2.2'
 # url='127.0.0.1'
 
 

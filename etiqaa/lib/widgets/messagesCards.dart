@@ -96,7 +96,7 @@ class _MessagesCardsState extends State<MessagesCards>
 
   childMessage(int index) async {
     List<Message> childList = [];
-    List response = await _crud.postRequest2(linkWhatsAppMessages, {
+    var response = await _crud.postRequest2(linkWhatsAppMessages, {
       'parent_id': sharedPref.getString('parent_id'),
       'child_name': children[index],
     });
