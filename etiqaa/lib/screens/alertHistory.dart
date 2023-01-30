@@ -254,12 +254,12 @@ class _AlertHistoryState extends State<AlertHistory> {
                                                     replaceLine(snap[index]
                                                                     .message)
                                                                 .length >
-                                                            40
+                                                            25
                                                         ? replaceLine(snap[
                                                                         index]
                                                                     .message)
                                                                 .substring(
-                                                                    0, 40) +
+                                                                    0, 25) +
                                                             '.....'
                                                         : replaceLine(
                                                             snap[index]

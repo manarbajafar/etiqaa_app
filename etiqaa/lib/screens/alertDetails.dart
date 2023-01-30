@@ -163,7 +163,8 @@ class AlertDetails extends StatelessWidget {
                     Align(
                       alignment: Alignment.topRight,
                       child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 25.w),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 25.w, vertical: 20.h),
                           child: Text(
                             '$content',
                             style: Theme.of(context).textTheme.headline5,

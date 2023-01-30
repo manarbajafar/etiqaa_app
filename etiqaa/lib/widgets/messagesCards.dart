@@ -356,12 +356,12 @@ class _MessagesCardsState extends State<MessagesCards>
                                                             replaceLine(snap[index]
                                                                             .message)
                                                                         .length >
-                                                                    40
+                                                                    25
                                                                 ? replaceLine(snap[index]
                                                                             .message)
                                                                         .substring(
                                                                             0,
-                                                                            40) +
+                                                                            25) +
                                                                     '.....'
                                                                 : replaceLine(
                                                                     snap[index]
@@ -567,8 +567,8 @@ class _MessagesCardsState extends State<MessagesCards>
                                                                     child: Text(
                                                                       replaceLine(snap[index].message)
                                                                                   .length >
-                                                                              40
-                                                                          ? replaceLine(snap[index].message).substring(0, 40) +
+                                                                              25
+                                                                          ? replaceLine(snap[index].message).substring(0, 25) +
                                                                               '.....'
                                                                           : replaceLine(
                                                                               snap[index].message),
@@ -770,8 +770,8 @@ class _MessagesCardsState extends State<MessagesCards>
                                                                               15.w),
                                                                       child:
                                                                           Text(
-                                                                        replaceLine(snap[index].message).length > 40
-                                                                            ? replaceLine(snap[index].message).substring(0, 40) +
+                                                                        replaceLine(snap[index].message).length > 25
+                                                                            ? replaceLine(snap[index].message).substring(0, 25) +
                                                                                 '.....'
                                                                             : replaceLine(snap[index].message),
                                                                         style: Theme.of(context)
@@ -966,8 +966,8 @@ class _MessagesCardsState extends State<MessagesCards>
                                                                               15.w),
                                                                       child:
                                                                           Text(
-                                                                        replaceLine(snap[index].message).length > 40
-                                                                            ? replaceLine(snap[index].message).substring(0, 40) +
+                                                                        replaceLine(snap[index].message).length > 25
+                                                                            ? replaceLine(snap[index].message).substring(0, 25) +
                                                                                 '.....'
                                                                             : replaceLine(snap[index].message),
                                                                         style: Theme.of(context)
