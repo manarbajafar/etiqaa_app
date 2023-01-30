@@ -32,11 +32,13 @@ class _LoginPSc extends State<LoginPSc> {
       if (loginFormKey.currentState!.validate()) {
         isLoading = true;
         setState(() {});
+        print("email: ${controller.email.text}");
+        print("password : ${controller.password.text}");
         var response = await _crud.postRequest(linklogin, {
           "email": controller.email.text,
           "password": controller.password.text,
         });
-
+        print("response line 39 : ${response.toString()}");
         isLoading = false;
         setState(() {});
         if (response["status"] == "success") {
