@@ -25,10 +25,6 @@ const String linkchooseChild = "$linkServerName/etiqaa_php/chooseChild.php";
 const String linkactivateChild = "$linkServerName/etiqaa_php/activateChild.php";
 
 //message
-const String linkStoreMsg = "$linkServerName/etiqaa_php/storeMsg.php";
-const String linkGetMsg = "$linkServerName/etiqaa_php/getMsg.php";
-const String linkUpdateLabel = "$linkServerName/etiqaa_php/updateLabel.php";
-//
 const String linkWhatsAppMessages =
     "$linkServerName/etiqaa_php/whatsAppMessages.php";
 const String linkChild = "$linkServerName/etiqaa_php/child.php";
