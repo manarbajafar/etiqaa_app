@@ -1,3 +1,4 @@
+import 'package:etiqaa/screens/choose_child_Sc.dart';
 import 'package:etiqaa/screens/first_sc.dart';
 import 'package:etiqaa/screens/homepage.dart';
 import 'package:flutter/material.dart';
@@ -88,9 +89,12 @@ class MyApp extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 )),
           ),
-          home: sharedPref.getString('parent_id') == null
+          home: sharedPref.getString('parent_id') == null &&
+                  sharedPref.getString('child_device') != '1'
               ? firstSc()
-              : HomePage(),
+              : sharedPref.getString('child_device') != ''
+                  ? HomePage()
+                  : ChooseChildSc(),
         );
       },
     );
