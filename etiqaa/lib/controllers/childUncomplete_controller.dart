@@ -27,8 +27,8 @@ class ChildUncompleteController extends GetxController {
   int? isActive;
   String? gender;
 
-  // final myServerUrl = 'http://192.168.8.102:5000/';
-  final myServerUrl = 'http://192.168.1.13:5000/'; //maram
+  final myServerUrl = 'http://192.168.8.102:5000/'; //manar
+  // final myServerUrl = 'http://192.168.1.13:5000/'; //maram
 
   @override
   void onInit() {
@@ -80,8 +80,8 @@ class ChildUncompleteController extends GetxController {
     // print(event.packageName); // PACKAGE USE TO SEND MESSAGE :
     print(event.text); // MESSAGE CONTENT  :
     // print(event.title); //SENDER NUMBER: OR HEADER
-
-    if (event.packageName == 'com.whatsapp' && event.id != 0) {
+//&& event.id != 0
+    if (event.packageName == 'com.whatsapp') {
       await processMsg(event);
     }
   }
@@ -146,7 +146,7 @@ class ChildUncompleteController extends GetxController {
     final decoded = json.decode(response.body) as Map<String, dynamic>;
 
     //this for tharaa :)
-    String label = decoded['label'];
+    List<dynamic> label = decoded['label'];
     if (label == 'NOT_APROP') {
       //Here take the same msg information (line 134 - 138) and deal with it
       print("label is $label");

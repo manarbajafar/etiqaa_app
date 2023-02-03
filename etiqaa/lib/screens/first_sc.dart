@@ -24,6 +24,7 @@ class firstSc extends StatelessWidget {
                 end: Alignment.bottomCenter,
                 colors: [
                   Theme.of(context).accentColor,
+                  // Color(0xffE5DFE1),
                   Theme.of(context).primaryColor,
                 ],
               ),
@@ -32,8 +33,8 @@ class firstSc extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset(
-                  'images/whiteLogo.png',
-                  height: 200.h,
+                  'images/logo1.png',
+                  height: 120.h,
                 ),
               ],
             ),
