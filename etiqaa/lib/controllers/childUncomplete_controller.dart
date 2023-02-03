@@ -153,20 +153,6 @@ class ChildUncompleteController extends GetxController {
     }
   }
 
-  void storeMsg(NotificationEvent msg) async {
-    print(
-        "child_name: $name , parent_id: ${sharedPref.getString('parent_id')}");
-
-    var response = await crud.postRequest2(linkStoreMsg, {
-      "child_name": name,
-      "sender": msg.title.toString(),
-      "date_time": msg.createAt.toString().substring(0, 19).toString(),
-      "content": msg.text,
-      "parent_id": sharedPref.getString('parent_id'),
-    });
-    print("response ${response}");
-  }
-
   activateC() async {
     isLoading = true;
     var response = await crud.postRequest(linkactivateChild, {
