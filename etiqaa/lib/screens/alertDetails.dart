@@ -234,7 +234,34 @@ class AlertDetails extends StatelessWidget {
                               )
                             ],
                           )
-                        : Container(),
+                        : Padding(
+                            padding: EdgeInsets.symmetric(vertical: 20.h),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                SizedBox(
+                                  height: 40.h,
+                                  width: 100.w,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      // ignore: deprecated_member_use
+                                      primary: const Color(0xF0F9AF4B),
+                                    ),
+                                    onPressed: () {
+                                      deleteMessage();
+
+                                      Get.off(AlertHistory());
+                                    },
+                                    child: Text(
+                                      'حذف الرسالة',
+                                      style:
+                                          Theme.of(context).textTheme.headline4,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                   ]),
             ),
           ],

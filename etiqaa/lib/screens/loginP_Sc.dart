@@ -56,6 +56,7 @@ class _LoginPSc extends State<LoginPSc> {
           } else {
             sharedPref.setInt('childrenNum', childrenNum);
           }
+          sharedPref.setString('child_device', '');
           controller.toHomePage();
         } else {
           msg = true;
