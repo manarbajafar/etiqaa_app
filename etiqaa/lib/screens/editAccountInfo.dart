@@ -8,6 +8,7 @@ import '../main.dart';
 import '../models/Parent.dart';
 import '../models/child.dart';
 import '../widgets/curvedAppbar.dart';
+import '../widgets/titledAppBar.dart';
 
 class editAccountInfo extends StatefulWidget {
   const editAccountInfo({Key? key, required this.info}) : super(key: key);
@@ -82,50 +83,7 @@ class _editAccountInfoState extends State<editAccountInfo> with Crud {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          alignment: Alignment(-0.5.w, -0.9.w),
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        toolbarHeight: 120.h,
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        flexibleSpace: ClipPath(
-          clipper: CurvedAppbar(),
-          child: Container(
-            height: 250.h,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Theme.of(context).accentColor,
-                  Theme.of(context).primaryColor,
-                ],
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 0.h, horizontal: 3.h),
-                  child: Text(
-                    'تعديل معلومات الحساب',
-                    style: Theme.of(context).textTheme.headline2,
-                  ),
-                ),
-                Image.asset(
-                  'images/whiteLogo.png',
-                  height: 70.h,
-                  width: 70.w,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
+      appBar: TitledAppBar(title: 'تعديل معلومات الحساب'),
       body: SingleChildScrollView(
         child: Form(
           key: caFormKey,

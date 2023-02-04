@@ -83,10 +83,6 @@ class ChildUncombletePSc extends StatelessWidget {
             preferredSize: Size.fromHeight(250.h),
             child: Column(
               children: [
-                Image.asset(
-                  'images/whiteLogo.png',
-                  height: 150.h,
-                ),
                 Padding(
                   padding:
                       EdgeInsets.only(top: 28.h, bottom: 30.h, right: 20.w),
