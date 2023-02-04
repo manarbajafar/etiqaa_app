@@ -115,10 +115,6 @@ class _ChildAccountState extends State<ChildAccount> with Crud {
             preferredSize: Size.fromHeight(250.h),
             child: Column(
               children: [
-                Image.asset(
-                  'images/whiteLogo.png',
-                  height: 150.h,
-                ),
                 Padding(
                   padding:
                       EdgeInsets.only(top: 28.h, bottom: 30.h, right: 20.w),
@@ -154,7 +150,7 @@ class _ChildAccountState extends State<ChildAccount> with Crud {
               ),
             ),
             Text(
-                 widget.isActive == '0'
+                widget.isActive == '0'
                     ? 'لم يتم إنهاء إجراءات هذا الطفل \nقم بربط الطفل بجهازه'
                     : '',
                 textAlign: TextAlign.center,

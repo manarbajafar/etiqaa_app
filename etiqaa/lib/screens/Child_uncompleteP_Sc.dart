@@ -9,7 +9,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'childAccount.dart';
 
 class ChildUncombletePSc extends StatelessWidget {
-  ChildUncompleteController controller = Get.put(ChildUncompleteController());
+  ChildUncompleteController controller =
+      Get.put(ChildUncompleteController(), permanent: true);
 
   String iconUrl(Gender gender, bool isActive) {
     if (gender == Gender.Boy && isActive) {
@@ -82,10 +83,6 @@ class ChildUncombletePSc extends StatelessWidget {
             preferredSize: Size.fromHeight(250.h),
             child: Column(
               children: [
-                Image.asset(
-                  'images/whiteLogo.png',
-                  height: 150.h,
-                ),
                 Padding(
                   padding:
                       EdgeInsets.only(top: 28.h, bottom: 30.h, right: 20.w),

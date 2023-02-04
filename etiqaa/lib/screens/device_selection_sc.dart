@@ -37,8 +37,8 @@ class deviceSelectionSc extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset(
-                  'images/whiteLogo.png',
-                  height: 200.h,
+                  'images/logo.png',
+                  height: 120.h,
                 ),
               ],
             ),

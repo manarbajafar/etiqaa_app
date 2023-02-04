@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../widgets/curvedAppbar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../widgets/titledAppBar.dart';
 import 'device_selection_sc.dart';
 import 'loginP_Sc.dart';
 
@@ -11,39 +12,7 @@ class forgetPassSuccessSc extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          toolbarHeight: 120.h,
-          backgroundColor: Colors.transparent,
-          elevation: 0.0,
-          flexibleSpace: ClipPath(
-            clipper: CurvedAppbar(),
-            child: Container(
-              height: 250.h,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Theme.of(context).accentColor,
-                    Theme.of(context).primaryColor,
-                  ],
-                ),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'images/whiteLogo.png',
-                    height: 70.h,
-                    width: 70.w,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
+        appBar: TitledAppBar(),
         body: SingleChildScrollView(
           child: Center(
             child: Column(

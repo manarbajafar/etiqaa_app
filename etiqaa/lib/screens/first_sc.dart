@@ -33,7 +33,7 @@ class firstSc extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset(
-                  'images/logo1.png',
+                  'images/logo.png',
                   height: 120.h,
                 ),
               ],

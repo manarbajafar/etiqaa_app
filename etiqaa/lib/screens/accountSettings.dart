@@ -11,6 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../main.dart';
 import '../widgets/curvedAppbar.dart';
+import '../widgets/titledAppBar.dart';
 import 'advice.dart';
 import 'alertHistory.dart';
 
@@ -20,43 +21,7 @@ class accountSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          alignment: Alignment(-1.0.h, -0.7.h),
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        toolbarHeight: 120.h,
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        flexibleSpace: ClipPath(
-            clipper: CurvedAppbar(),
-            child: Container(
-              height: 250.h,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Theme.of(context).accentColor,
-                    Theme.of(context).primaryColor,
-                  ],
-                ),
-              ),
-              child: Align(
-                alignment: Alignment.center,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 2.h),
-                  child: Image.asset(
-                    'images/whiteLogo.png',
-                    height: 70.h,
-                    width: 70.w,
-                  ),
-                ),
-              ),
-            )),
-      ),
+      appBar: TitledAppBar(),
       bottomNavigationBar: CurvedNavigationBar(
           // type: BottomNavigationBarType.fixed,
           index: 2,

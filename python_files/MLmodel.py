@@ -123,11 +123,11 @@ def index():
     sql1="SELECT max(msg_id) FROM whats_app_message WHERE parent_id = %s AND child_name = %s"
     val1 = (parent_id, child_name)
     mycursor.execute(sql1, val1)
-    result=mycursor.fetchone()
-    if(result[0] is None):
+    result1=mycursor.fetchone()
+    if(result1[0] is None):
       msg_id=0
     else:
-      msg_id=int(result[0])
+      msg_id=int(result1[0])
       
 
     sql = "INSERT INTO whats_app_message (parent_id, child_name, date_time, sender, content, msg_id) VALUES (%s, %s, %s, %s, %s,%s)"
@@ -136,7 +136,7 @@ def index():
 
 
     mydb.commit()
-    return jsonify({'label' : result})
+    # return jsonify({'label' : result})
   ######
   return jsonify({'label' : result}) #returning key-value pair in json format
   

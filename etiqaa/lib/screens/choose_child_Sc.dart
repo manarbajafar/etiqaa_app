@@ -10,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../database/crud.dart';
 import '../database/linkApi.dart';
+import '../widgets/titledAppBar.dart';
 
 class ChooseChildSc extends StatefulWidget {
   @override
@@ -17,7 +18,8 @@ class ChooseChildSc extends StatefulWidget {
 }
 
 class _ChooseChildSc extends State<ChooseChildSc> {
-  ChildUncompleteController controller = Get.put(ChildUncompleteController());
+  ChildUncompleteController controller =
+      Get.put(ChildUncompleteController(), permanent: true);
 
   int childrenNum = 0;
 
@@ -37,45 +39,7 @@ class _ChooseChildSc extends State<ChooseChildSc> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-            alignment: Alignment(-1.0.h, -0.7.h),
-            icon: Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () {
-              Get.to(firstSc());
-              sharedPref.clear();
-            }),
-        toolbarHeight: 120.h,
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        flexibleSpace: ClipPath(
-            clipper: CurvedAppbar(),
-            child: Container(
-              height: 250.h,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Theme.of(context).accentColor,
-                    Theme.of(context).primaryColor,
-                  ],
-                ),
-              ),
-              child: Align(
-                alignment: Alignment.center,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 2.h),
-                  child: Image.asset(
-                    'images/whiteLogo.png',
-                    height: 70.h,
-                    width: 70.w,
-                  ),
-                ),
-              ),
-            )),
-      ),
+      appBar: TitledAppBar(),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 0.h, horizontal: 5.h),
@@ -143,8 +107,19 @@ class _ChooseChildSc extends State<ChooseChildSc> {
                       if ('${snap[index]['parent_id']}' ==
                           sharedPref.getString('parent_id')) {
                         return InkWell(
-                          onTap: () {
-                            //
+                          onTap: () async {
+                            await sharedPref.setString(
+                                'child_name', snap[index]['child_name']);
+
+                            await sharedPref.setString(
+                                'date_of_birth', snap[index]['date_of_birth']);
+
+                            await sharedPref.setInt(
+                                'isActive', snap[index]['isActive']);
+
+                            await sharedPref.setString(
+                                'gender', snap[index]['gender']);
+
                             controller.name = snap[index]['child_name'];
                             controller.age = snap[index]['date_of_birth'];
                             controller.isActive = snap[index]['isActive'];

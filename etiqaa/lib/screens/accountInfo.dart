@@ -7,6 +7,7 @@ import '../database/crud.dart';
 import '../database/linkApi.dart';
 import '../models/child.dart';
 import '../widgets/curvedAppbar.dart';
+import '../widgets/titledAppBar.dart';
 import 'confirmDeletion.dart';
 import 'editAccountInfo.dart';
 
@@ -34,48 +35,8 @@ class _AccountInfoState extends State<AccountInfo> with Crud {
 
   @override
   Widget build(BuildContext context) {
-    var appbar = AppBar(
-      leading: IconButton(
-        alignment: Alignment(-1.0.w, -0.7.w),
-        icon: Icon(Icons.arrow_back, color: Colors.white),
-        onPressed: () => Navigator.of(context).pop(),
-      ),
-      toolbarHeight: 250.h,
-      backgroundColor: Colors.transparent,
-      elevation: 0.0,
-      flexibleSpace: ClipPath(
-        clipper: CurvedAppbar(),
-        child: Container(
-          height: 300.h,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.center,
-              end: Alignment.bottomCenter,
-              colors: [
-                Theme.of(context).accentColor,
-                Theme.of(context).primaryColor,
-              ],
-            ),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                'images/whiteLogo.png',
-                height: 150.h,
-              ),
-              Text(
-                'معلومات الحساب',
-                style: Theme.of(context).textTheme.headline2,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
     return Scaffold(
-      appBar: appbar,
+      appBar: TitledAppBar(title: 'معلومات الحساب'),
       body: FutureBuilder(
           future: accountInfo(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {

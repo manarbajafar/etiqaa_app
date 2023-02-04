@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../widgets/curvedAppbar.dart';
+import '../widgets/titledAppBar.dart';
 
 class ConfirmDeletion extends StatelessWidget {
   const ConfirmDeletion({Key? key}) : super(key: key);
@@ -10,37 +11,7 @@ class ConfirmDeletion extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          toolbarHeight: 300.h,
-          backgroundColor: Colors.transparent,
-          elevation: 0.0,
-          flexibleSpace: ClipPath(
-            clipper: CurvedAppbar(),
-            child: Container(
-              height: 350.h,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Theme.of(context).accentColor,
-                    Theme.of(context).primaryColor,
-                  ],
-                ),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'images/whiteLogo.png',
-                    height: 200.h,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
+        appBar: TitledAppBar(),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
