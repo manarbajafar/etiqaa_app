@@ -103,15 +103,15 @@ class _ChildrenListState extends State<ChildrenList> {
           onTap: (index) {
             switch (index) {
               case 0:
-                Get.to(Advice());
+                Get.off(Advice());
                 break;
               case 1:
                 setState(() {
-                  Get.to(HomePage());
+                  Get.off(HomePage());
                 });
                 break;
               case 2:
-                Get.to(accountSettings());
+                Get.off(accountSettings());
                 break;
             }
             //selectedIndex = index;

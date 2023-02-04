@@ -89,10 +89,9 @@ class MyApp extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 )),
           ),
-          home: sharedPref.getString('parent_id') == null &&
-                  sharedPref.getString('child_device') != '1'
+          home: sharedPref.getString('parent_id') == null
               ? firstSc()
-              : sharedPref.getString('child_device') != ''
+              : sharedPref.getInt('child_device') == 0
                   ? HomePage()
                   : ChooseChildSc(),
         );

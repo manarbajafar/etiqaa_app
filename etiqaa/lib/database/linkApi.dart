@@ -1,8 +1,8 @@
 // const String linkServerName = 'http://10.0.2.2'; //emulator
 // const String linkServerName = "http://192.168.100.16"; //thraa from phone
-const String linkServerName = "http://192.168.8.102"; //manar form phone
+// const String linkServerName = "http://192.168.8.102"; //manar form phone
 // // const String linkServerName = "http://172.20.10.3"; //maram wifi
-// const String linkServerName = "http://192.168.1.13"; //maram form phone
+const String linkServerName = "http://192.168.1.13"; //maram form phone
 
 // Auth
 const String linkAccountInfo = "$linkServerName/etiqaa_php/accountInfo.php";
