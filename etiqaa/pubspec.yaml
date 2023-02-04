@@ -39,7 +39,7 @@ dependencies:
   email_auth: ^1.0.0
   email_validator: ^2.1.17
   shared_preferences: ^2.0.15
-  flutter_notification_listener: ^1.0.7
+  flutter_notification_listener: 1.0.7
   
 dev_dependencies:
   flutter_test:

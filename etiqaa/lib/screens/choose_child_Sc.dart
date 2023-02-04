@@ -16,7 +16,8 @@ class ChooseChildSc extends StatefulWidget {
 }
 
 class _ChooseChildSc extends State<ChooseChildSc> {
-  ChildUncompleteController controller = Get.put(ChildUncompleteController());
+  ChildUncompleteController controller =
+      Get.put(ChildUncompleteController(), permanent: true);
 
   int childrenNum = 0;
 
@@ -140,8 +141,19 @@ class _ChooseChildSc extends State<ChooseChildSc> {
                       if ('${snap[index]['parent_id']}' ==
                           sharedPref.getString('parent_id')) {
                         return InkWell(
-                          onTap: () {
-                            //
+                          onTap: () async {
+                            await sharedPref.setString(
+                                'child_name', snap[index]['child_name']);
+
+                            await sharedPref.setString(
+                                'date_of_birth', snap[index]['date_of_birth']);
+
+                            await sharedPref.setInt(
+                                'isActive', snap[index]['isActive']);
+
+                            await sharedPref.setString(
+                                'gender', snap[index]['gender']);
+
                             controller.name = snap[index]['child_name'];
                             controller.age = snap[index]['date_of_birth'];
                             controller.isActive = snap[index]['isActive'];

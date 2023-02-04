@@ -42,7 +42,8 @@ class _LoginCSc extends State<LoginCSc> {
           sharedPref.setString(
               'parent_id', response['data']['parent_id'].toString());
           sharedPref.setString('child_device', '1');
-
+          print(
+              "response line 45:   ${response['data']['parent_id'].toString()}");
           controller.toChooseChild();
         } else {
           msg = true;
