@@ -33,43 +33,6 @@ Crud _crud = Crud();
 bool msg = false;
 List<Message> messageList = [];
 
-messages() async {
-  messageList = [];
-  var response = await _crud.postRequest2(linkAlertHistory, {
-    'parent_id': sharedPref.getString('parent_id'),
-  });
-  // print('response line 40: ${response.toString()}');
-  if (response != null && response[0]["statues"] == "success") {
-    for (int i = 0; i < response.length; i++) {
-      var responseChild = await _crud.postRequest2(linkChild, {
-        'child_name': response[i]["child_name"],
-        'parent_id': sharedPref.getString('parent_id'),
-      });
-      // print('responceChild: ${responseChild.toString()}');
-      if (responseChild != null && responseChild[0]['statues'] == "success") {
-        // print('id : ${response[i]['msg_id']}');
-        msg = true;
-        messageList.add(
-          Message(
-              id: (response[i]['msg_id']),
-              childName: responseChild[0]['child_name'],
-              childgender: getGender(responseChild[0]['gender']),
-              message: response[i]['content'],
-              date: response[i]['date_time'].toString(),
-              senderName: response[i]['sender'],
-              isSaved: false),
-        );
-        print('messageList line 58: ${messageList.toString()}');
-      } else {
-        print('Child fail');
-      }
-    }
-  } else {
-    print('Msg fail');
-  }
-  return messageList;
-}
-
 class AlertHistory extends StatefulWidget {
   @override
   State<AlertHistory> createState() => _AlertHistoryState();
@@ -78,8 +41,46 @@ class AlertHistory extends StatefulWidget {
 class _AlertHistoryState extends State<AlertHistory> {
   @override
   void initState() {
-    messageList = [];
+    setState(() {
+      messageList = [];
+    });
     super.initState();
+  }
+
+  messages() async {
+    messageList.clear();
+    var response = await _crud.postRequest2(linkAlertHistory, {
+      'parent_id': sharedPref.getString('parent_id'),
+    });
+    // print('response line 40: ${response.toString()}');
+    if (response != null && response[0]["statues"] == "success") {
+      for (int i = 0; i < response.length; i++) {
+        var responseChild = await _crud.postRequest2(linkChild, {
+          'child_name': response[i]["child_name"],
+          'parent_id': sharedPref.getString('parent_id'),
+        });
+        // print('responceChild: ${responseChild.toString()}');
+        if (responseChild != null && responseChild[0]['statues'] == "success") {
+          // print('id : ${response[i]['msg_id']}');
+          msg = true;
+          messageList.add(
+            Message(
+                id: (response[i]['msg_id']),
+                childName: responseChild[0]['child_name'],
+                childgender: getGender(responseChild[0]['gender']),
+                message: response[i]['content'],
+                date: response[i]['date_time'].toString(),
+                senderName: response[i]['sender'],
+                isSaved: false),
+          );
+        } else {
+          print('Child fail');
+        }
+      }
+    } else {
+      print('Msg fail');
+    }
+    return messageList;
   }
 
   @override
@@ -108,13 +109,13 @@ class _AlertHistoryState extends State<AlertHistory> {
           onTap: (index) {
             switch (index) {
               case 0:
-                Get.to(Advice());
+                Get.off(Advice());
                 break;
               case 1:
-                Get.to(HomePage());
+                Get.off(HomePage());
                 break;
               case 2:
-                Get.to(accountSettings());
+                Get.off(accountSettings());
                 break;
             }
             //selectedIndex = index;

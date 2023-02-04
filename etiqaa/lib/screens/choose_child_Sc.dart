@@ -1,5 +1,6 @@
 import 'package:etiqaa/main.dart';
 import 'package:etiqaa/screens/Child_uncompleteP_Sc.dart';
+import 'package:etiqaa/screens/first_sc.dart';
 import 'package:flutter/material.dart';
 import '../controllers/childUncomplete_controller.dart';
 import '../models/child.dart';
@@ -123,7 +124,8 @@ class _ChooseChildSc extends State<ChooseChildSc> {
                             controller.age = snap[index]['date_of_birth'];
                             controller.isActive = snap[index]['isActive'];
                             controller.gender = snap[index]['gender'];
-
+                            sharedPref.setString(
+                                'child_name', snap[index]['child_name']);
                             Get.to(() => ChildUncombletePSc());
                           },
                           child: childIcon(
