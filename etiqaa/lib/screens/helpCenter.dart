@@ -23,7 +23,7 @@ class _HelpCenterState extends State<HelpCenter> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TitledAppBar(),
+      appBar: TitledAppBar(title: 'المساعدات'),
       bottomNavigationBar: CurvedNavigationBar(
           // type: BottomNavigationBarType.fixed,
           index: 2,
@@ -61,13 +61,7 @@ class _HelpCenterState extends State<HelpCenter> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 20.h),
-              child: Text(
-                'المساعدات',
-                style: Theme.of(context).textTheme.headline1,
-              ),
-            ),
+            SizedBox(height: 50.h),
             ClipRRect(
               borderRadius: BorderRadius.circular(15.r),
               child: SizedBox(

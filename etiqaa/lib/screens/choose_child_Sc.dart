@@ -39,17 +39,12 @@ class _ChooseChildSc extends State<ChooseChildSc> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TitledAppBar(),
+      appBar: TitledAppBar(title: 'اختر طفل'),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 0.h, horizontal: 5.h),
           child: Column(
             children: [
-              Text(
-                'اختر طفل',
-                style: Theme.of(context).textTheme.headline1,
-                //color: Colors.black,
-              ),
               // ListView.builder(
               //     /* both ListView and Column take the full screen available to them, as this way we can only see ListView on the screen, to resolve this we have to shrink ListView to its exact size, for it shrinkwrap: true is used.
               //     physics: NeverScrollableScrollPhysics(), is used here to stop ListView scrolling */

@@ -12,7 +12,7 @@ class SignupControllerImp extends SignupController {
   late TextEditingController name;
   late TextEditingController email;
   late TextEditingController password;
-  late TextEditingController phoneNumber;
+
   //TextEditingController gender= TextEditingController();
   var gender;
 
@@ -23,7 +23,6 @@ class SignupControllerImp extends SignupController {
     name.clear();
     email.clear();
     password.clear();
-    phoneNumber.clear();
   }
 
   @override
@@ -31,7 +30,6 @@ class SignupControllerImp extends SignupController {
     name = TextEditingController();
     email = TextEditingController();
     password = TextEditingController();
-    phoneNumber = TextEditingController();
     gender = 'boy';
     super.onInit();
   }
@@ -41,7 +39,6 @@ class SignupControllerImp extends SignupController {
     name.dispose();
     email.dispose();
     password.dispose();
-    phoneNumber.dispose();
     super.dispose();
   }
 

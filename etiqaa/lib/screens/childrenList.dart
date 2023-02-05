@@ -44,7 +44,9 @@ class _ChildrenListState extends State<ChildrenList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TitledAppBar(),
+      appBar: TitledAppBar(
+        title: 'قائمة الأطفال',
+      ),
       bottomNavigationBar: CurvedNavigationBar(
           // type: BottomNavigationBarType.fixed,
           index: 2,
@@ -84,20 +86,16 @@ class _ChildrenListState extends State<ChildrenList> {
         child: Column(
           children: [
             Container(
-              height: 80.h,
+              height: 45.h,
               width: double.infinity,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    'قائمة الأطفال',
-                    style: Theme.of(context).textTheme.headline1,
-                  ),
                   Text('لا يمكن إضافة أكثر من ثلاثة أطفال',
                       style: Theme.of(context).textTheme.headline3),
-                  SizedBox(
-                    height: 5.h,
-                  ),
+                  // SizedBox(
+                  //   height: 2.h,
+                  // ),
                 ],
               ),
             ),
