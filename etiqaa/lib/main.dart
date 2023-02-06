@@ -7,6 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'screens/Child_uncompleteP_Sc.dart';
+
 late SharedPreferences sharedPref;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -93,7 +95,7 @@ class MyApp extends StatelessWidget {
               ? firstSc()
               : sharedPref.getInt('child_device') == 0
                   ? HomePage()
-                  : ChooseChildSc(),
+                  : ChildUncombletePSc(), //ChooseChildSc() ChildUncombletePSc()
         );
       },
     );
