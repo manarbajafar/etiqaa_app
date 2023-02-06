@@ -12,6 +12,14 @@ class ChildUncombletePSc extends StatelessWidget {
   ChildUncompleteController controller =
       Get.put(ChildUncompleteController(), permanent: true);
 
+  ChildUncombletePSc() {
+    controller.name = sharedPref.getString('child_name');
+    controller.age = sharedPref.getString('date_of_birth');
+    controller.isActive = sharedPref.getInt('isActive');
+    controller.gender = sharedPref.getString('gender');
+    // controller.started = sharedPref.getBool('isStarted')!;
+  }
+
   String iconUrl(Gender gender, bool isActive) {
     if (gender == Gender.Boy && isActive) {
       return ('images/boyIcon_c.png');

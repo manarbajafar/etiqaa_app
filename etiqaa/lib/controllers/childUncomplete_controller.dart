@@ -37,17 +37,21 @@ class ChildUncompleteController extends GetxController {
     initPlatformState();
     super.onInit();
     parent_id = sharedPref.getString('parent_id');
+    // started = sharedPref.getBool('isStarted')!;
+    print("vars in line 41, name: ${name}, isActive: ${isActive}");
+    print(
+        "sharedpref in line 41, name: ${sharedPref.getString('child_name')}, isActive: ${sharedPref.getInt('isActive')}");
   }
 
   // we must use static method, to handle in background
   static void _callback(NotificationEvent evt) async {
     sharedPref = await SharedPreferences.getInstance();
-
+    final instance = new ChildUncompleteController();
     // HANDLING BACKGROUND NOTIFICATIONS :
     print('GETTING INFO FROM BACKGROUND');
     print(evt.text); // MESSAGE CONTENT  :
-    final instance = new ChildUncompleteController();
     if (evt.packageName == 'com.whatsapp') {
+      print("isActive value is : ${instance.isActive}");
       instance.processMsg(evt);
     }
 
@@ -118,6 +122,7 @@ class ChildUncompleteController extends GetxController {
     //if he agree
     flag = true;
     activateC();
+    await sharedPref.setBool('isStarted', true);
     started = true;
     _loading = false;
     update();
@@ -152,6 +157,8 @@ class ChildUncompleteController extends GetxController {
 
     String? label;
     name = await sharedPref.getString('child_name');
+    isActive = await sharedPref.getInt('isActive'); // test
+
     var body = {
       'content': msg.text,
       "sender": msg.title.toString(),
@@ -183,6 +190,7 @@ class ChildUncompleteController extends GetxController {
 
   activateC() async {
     isLoading = true;
+
     var response = await crud.postRequest(linkactivateChild, {
       "child_name": name,
       "parent_id": sharedPref.getString("parent_id"),
@@ -191,6 +199,7 @@ class ChildUncompleteController extends GetxController {
     if (response != null && response["status"] != "fail") {
       backbutton = false;
       isActive = 1;
+      await sharedPref.setInt('isActive', 1);
       update();
     } else {
       print("activate fail");
