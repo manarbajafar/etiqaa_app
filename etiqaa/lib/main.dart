@@ -1,6 +1,7 @@
 import 'package:etiqaa/screens/choose_child_Sc.dart';
 import 'package:etiqaa/screens/first_sc.dart';
 import 'package:etiqaa/screens/homepage.dart';
+import 'package:etiqaa/widgets/notificationApi.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter/services.dart';
@@ -9,6 +10,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 late SharedPreferences sharedPref;
 void main() async {
+  late final NotificationApi notification = NotificationApi();
+  // ignore: unused_element
+  void initState() {
+    notification.initNotification();
+  }
+
   WidgetsFlutterBinding.ensureInitialized();
   sharedPref = await SharedPreferences.getInstance();
   runApp(MyApp());

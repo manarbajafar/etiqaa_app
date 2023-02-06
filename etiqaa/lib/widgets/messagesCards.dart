@@ -12,6 +12,7 @@ import '../models/message.dart';
 import 'package:get/get.dart';
 import '../screens/addChild.dart';
 import '../screens/alertDetails.dart';
+import 'notificationApi.dart';
 
 class MessagesCards extends StatefulWidget {
   @override
@@ -28,6 +29,7 @@ class _MessagesCardsState extends State<MessagesCards>
     setState(() {
       messageList.clear();
       messageList = [];
+
       tablist();
     });
     super.initState();
@@ -217,7 +219,7 @@ class _MessagesCardsState extends State<MessagesCards>
                         ? InkWell(
                             onTap: () {},
                             child: InkWell(
-                              onTap: () {
+                              onTap: () async {
                                 Get.to(addChild());
                               },
                               child: Container(

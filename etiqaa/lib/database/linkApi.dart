@@ -1,4 +1,4 @@
-const String linkServerName = 'http://10.0.2.2'; //emulator
+// const String linkServerName = 'http://10.0.2.2'; //emulator
 // const String linkServerName = "http://192.168.100.16"; //thraa from phone
 // const String linkServerName = "http://192.168.8.102"; //manar form phone
 // // const String linkServerName = "http://172.20.10.3"; //maram wifi
@@ -32,3 +32,5 @@ const String linkSaveMessage = "$linkServerName/etiqaa_php/saveMessage.php";
 const String linkdeleteMessages =
     "$linkServerName/etiqaa_php/deleteMessage.php";
 const String linkAlertHistory = "$linkServerName/etiqaa_php/alertHistory.php";
+const String linkNotification = "$linkServerName/etiqaa_php/message.php";
+const String linkSendedMessage = "$linkServerName/etiqaa_php/sendedMessage.php";
