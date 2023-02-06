@@ -42,6 +42,8 @@ class ChildUncombletePSc extends StatelessWidget {
   }
 
   bool back = true;
+  String status = 'لم يتم إنهاء اجراءات هذا الطفل';
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -131,12 +133,12 @@ class ChildUncombletePSc extends StatelessWidget {
                         EdgeInsets.symmetric(vertical: 3.h, horizontal: 3.w),
                     child: !value.flag
                         ? Text(
-                            'لم يتم إنهاء اجراءات هذا الطفل',
+                            status,
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.headline3,
                           )
                         : Text(
-                            'تم انهاء إجراءات هذا الطفل ',
+                            status,
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.headline3,
                           ),
@@ -154,11 +156,19 @@ class ChildUncombletePSc extends StatelessWidget {
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Theme.of(context).buttonColor,
                             ),
-                            onPressed: () {
-                              print("message 1 ${value.started}");
+                            onPressed: () async {
                               value.started
-                                  ? value.stopListening()
-                                  : value.startListening();
+                                  ? await value.stopListening()
+                                  : await value.startListening();
+
+                              print(value.started);
+                              if (value.started) {
+                                print(status);
+                                status = 'تم انهاء إجراءات هذا الطفل';
+                                print(status);
+                              }
+
+                              controller.obs();
                             },
                             child: Text(
                               ' إنهاء الاجراءات ',

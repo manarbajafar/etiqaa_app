@@ -86,7 +86,7 @@ class _AlertHistoryState extends State<AlertHistory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TitledAppBar(),
+      appBar: TitledAppBar(title: 'سجل التنبيهات'),
       bottomNavigationBar: CurvedNavigationBar(
           // type: BottomNavigationBarType.fixed,
           index: 2,
@@ -122,10 +122,6 @@ class _AlertHistoryState extends State<AlertHistory> {
           }),
       body: Center(
         child: Column(children: [
-          Text(
-            'سجل التنبيهات',
-            style: Theme.of(context).textTheme.headline1,
-          ),
           Expanded(
             flex: 1,
             child: FutureBuilder(

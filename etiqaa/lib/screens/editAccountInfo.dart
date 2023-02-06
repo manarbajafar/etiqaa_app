@@ -21,7 +21,6 @@ class editAccountInfo extends StatefulWidget {
 class _editAccountInfoState extends State<editAccountInfo> with Crud {
   TextEditingController name = TextEditingController();
   TextEditingController password = TextEditingController();
-  TextEditingController phone = TextEditingController();
   TextEditingController genderC = TextEditingController();
 
   String getGenderValue(String gender) {
@@ -68,7 +67,6 @@ class _editAccountInfoState extends State<editAccountInfo> with Crud {
     var response = await postRequest(linkEditAccountInfo, {
       'name': name.text,
       'password': password.text,
-      'phone_number': phone.text,
       'gender': genderC.text,
       'parent_id':
           sharedPref.getString('parent_id'), //widget.info[index]['parent_id']
@@ -137,31 +135,6 @@ class _editAccountInfoState extends State<editAccountInfo> with Crud {
                     },
                     onSaved: (value) {
                       password.text = value.toString();
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(bottom: 10.h),
-                  child: TextFormField(
-                    initialValue: widget.info[index]['phone_number'],
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    keyboardType: TextInputType.phone,
-                    decoration: InputDecoration(
-                      labelText: ' رقم الهاتف',
-                      hintText: '966123456789',
-                      labelStyle: Theme.of(context).textTheme.headline5,
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'الرجاء ادخال رقم الهاتف';
-                      }
-                      if (value.length != 12) {
-                        return 'يجب ان يكون رقم الهاتف مكون من 12 ارقام';
-                      }
-                      return null;
-                    },
-                    onSaved: (value) {
-                      phone.text = value.toString();
                     },
                   ),
                 ),

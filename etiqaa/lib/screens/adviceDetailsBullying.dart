@@ -16,19 +16,10 @@ class _AdviceDetailsBullyingState extends State<AdviceDetailsBullying> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TitledAppBar(),
+      appBar: TitledAppBar(title: 'التعامل مع التنمر الإلكتروني'),
       body: SingleChildScrollView(
           child: Column(
         children: [
-          Center(
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 2.h),
-              child: Text(
-                'التعامل مع التنمر الإلكتروني',
-                style: Theme.of(context).textTheme.headline1,
-              ),
-            ),
-          ),
           Align(
             alignment: Alignment.topRight,
             child: Column(

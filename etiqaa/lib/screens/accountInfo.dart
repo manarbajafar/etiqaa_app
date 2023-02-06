@@ -59,6 +59,7 @@ class _AccountInfoState extends State<AccountInfo> with Crud {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              SizedBox(height: 70.h),
                               Padding(
                                 padding: EdgeInsets.only(bottom: 10.h),
                                 child: Text(
@@ -70,13 +71,6 @@ class _AccountInfoState extends State<AccountInfo> with Crud {
                                 padding: EdgeInsets.only(bottom: 10.h),
                                 child: Text(
                                   'كلمة المرور: ${stars((snap[i]['password']))}',
-                                  style: Theme.of(context).textTheme.headline5,
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(bottom: 10.h),
-                                child: Text(
-                                  'رقم الهاتف: ${snap[i]['phone_number']}',
                                   style: Theme.of(context).textTheme.headline5,
                                 ),
                               ),

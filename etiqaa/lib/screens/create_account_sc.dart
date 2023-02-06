@@ -41,7 +41,6 @@ class _CreateAccountForm extends State<createAcountSc> {
         var response = await _crud.postRequest(linksignup, {
           "name": controller.name.text,
           "email": controller.email.text,
-          "phone_number": controller.phoneNumber.text,
           "gender": controller.gender.toString(),
           "password": controller.password.text,
         });
@@ -124,23 +123,6 @@ class _CreateAccountForm extends State<createAcountSc> {
                       });
                     },
                   ),
-                ),
-                CustomTextForm(
-                  controllar: controller.phoneNumber,
-                  textInputType: TextInputType.phone,
-                  labelText: ' رقم الهاتف',
-                  padding: EdgeInsets.only(bottom: 10.h),
-                  obscureText: false,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'الرجاء ادخال رقم الهاتف';
-                    }
-                    if (value.length != 12) {
-                      return 'يجب ان يكون رقم الهاتف مكون من 12 ارقام';
-                    }
-                    return null;
-                  },
-                  hintText: '966123456789',
                 ),
                 Container(
                   padding: EdgeInsets.only(bottom: 10.h),

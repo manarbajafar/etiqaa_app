@@ -94,7 +94,7 @@ class ChildUncompleteController extends GetxController {
     }
   }
 
-  void startListening() async {
+  Future<void> startListening() async {
     print("start listening");
 
     _loading = true;
@@ -103,17 +103,17 @@ class ChildUncompleteController extends GetxController {
     bool? hasPermission = await NotificationsListener.hasPermission;
     if (hasPermission == false) {
       print("no permission, so open settings");
-      NotificationsListener.openPermissionSettings();
-      return;
+      await NotificationsListener.openPermissionSettings();
     }
-
+    while (!(hasPermission!)) {
+      hasPermission = await NotificationsListener.hasPermission;
+      print('no per');
+    }
+    print('per is active');
     bool? isR = await NotificationsListener.isRunning;
-
     if (isR == false) {
       await NotificationsListener.startService(
-          title: "we still with you ",
-          description: "payai from feelsafe",
-          foreground: false);
+          title: "we still with you ", description: "payai from feelsafe");
     }
     //if he agree
     flag = true;
@@ -123,7 +123,7 @@ class ChildUncompleteController extends GetxController {
     update();
   }
 
-  void stopListening() async {
+  Future<void> stopListening() async {
     print("stop listening");
 
     _loading = true;
