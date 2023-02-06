@@ -1,6 +1,9 @@
 import 'package:etiqaa/widgets/curvedAppbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:etiqaa/screens/first_sc.dart';
+import '../main.dart';
 
 class TitledAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -10,10 +13,15 @@ class TitledAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       leading: IconButton(
-        alignment: Alignment(-1.0.h, -0.7.h),
-        icon: Icon(Icons.arrow_back, color: Colors.white),
-        onPressed: () => Navigator.of(context).pop(),
-      ),
+          alignment: Alignment(-1.0.h, -0.7.h),
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            // sharedPref.clear();
+            // Get.offAll(firstSc());
+            Navigator.of(context).pop();
+          }
+          //=>
+          ),
       toolbarHeight: 120.h,
       backgroundColor: Colors.transparent,
       elevation: 0.0,
