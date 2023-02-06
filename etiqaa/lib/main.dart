@@ -7,13 +7,18 @@ import 'package:get/get.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:workmanager/workmanager.dart';
+
+import 'screens/Child_uncompleteP_Sc.dart';
 
 late SharedPreferences sharedPref;
 void main() async {
   late final NotificationApi notification = NotificationApi();
-  // ignore: unused_element
+  // ignore: unused_eleme
   void initState() {
     notification.initNotification();
+    Workmanager()
+        .registerPeriodicTask('1', 'P N', frequency: Duration(seconds: 2));
   }
 
   WidgetsFlutterBinding.ensureInitialized();
@@ -100,7 +105,7 @@ class MyApp extends StatelessWidget {
               ? firstSc()
               : sharedPref.getInt('child_device') == 0
                   ? HomePage()
-                  : ChooseChildSc(),
+                  : ChildUncombletePSc(), //ChooseChildSc() ChildUncombletePSc()
         );
       },
     );

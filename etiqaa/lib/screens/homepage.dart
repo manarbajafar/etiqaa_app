@@ -2,8 +2,11 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:etiqaa/database/crud.dart';
 import 'package:etiqaa/screens/accountSettings.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_notification_listener/flutter_notification_listener.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:workmanager/workmanager.dart';
 import '../database/linkApi.dart';
 import '../main.dart';
 import '../widgets/curvedAppbar.dart';
@@ -14,11 +17,58 @@ import '../widgets/titledAppBar.dart';
 import 'advice.dart';
 import 'alertHistory.dart';
 
+void callbackDispatcher() {
+  // initial notifications
+  var initializationSettingsAndroid =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
+
+  var initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+  );
+
+  var flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+  WidgetsFlutterBinding.ensureInitialized();
+
+  flutterLocalNotificationsPlugin.initialize(
+    initializationSettings,
+  );
+
+  Crud _crud = Crud();
+  notify() async {
+    var response = await _crud.postRequest2(linkNotification, {
+      'parent_id': '${sharedPref.getString('parent_id')}',
+    });
+    print('29: ${response.toString()}');
+    if (response[0]['statues'] == 'success') {
+      NotificationApi().showNotification(
+          id: 0,
+          title: 'اتقاء',
+          body: 'اكتشفنا مشكلة محتملة',
+          payload: 'payload');
+
+      for (int i = 0; i < response.length; i++) {
+        var response2 = await _crud.postRequest2(linkSendedMessage, {
+          'msg_id': response[i]['msg_id'].toString(),
+          'parent_id': sharedPref.getString('parent_id'),
+          'child_name': response[i]['child_name'],
+        });
+      }
+    }
+  }
+
+  Workmanager().executeTask((task, inputData) async {
+    notify();
+    return Future.value(true);
+  });
+}
+
 class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
+int index = 0;
 late final NotificationApi notification = NotificationApi();
 
 class _HomePageState extends State<HomePage> with Crud {
@@ -44,17 +94,31 @@ class _HomePageState extends State<HomePage> with Crud {
     }
   }
 
-  Widget get isHasChild {
+  @override
+  void initState() {
     notification.initNotification();
     listenNotification();
-    // print(
-    //     "sharedPref.getInt('childrenNum') ${sharedPref.getInt('childrenNum')}");
-    // print(
-    //     "sharedPref.getString('parent_id'): ${sharedPref.getString('parent_id')}");
+    Future.delayed(Duration(seconds: 2), () {});
+
+    Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
+    Workmanager().registerPeriodicTask(
+      "1",
+      "periodic Notification",
+      frequency: Duration(seconds: 2),
+    );
+    super.initState();
+  }
+
+  Widget get isHasChild {
     if (sharedPref.getInt('childrenNum') == 0) {
       return NoChildren();
     } else {
-      listenNotification();
+      // listenNotification();
+      // Workmanager().registerPeriodicTask(
+      //   "1",
+      //   "periodic Notification",
+      //   frequency: Duration(seconds: 2),
+      // );
       notify();
       return MessagesCards();
     }
