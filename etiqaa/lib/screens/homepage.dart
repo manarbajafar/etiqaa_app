@@ -24,9 +24,10 @@ late final NotificationApi notification = NotificationApi();
 class _HomePageState extends State<HomePage> with Crud {
   notify() async {
     var response = await postRequest2(linkNotification, {
-      'parent_id': '${sharedPref.getString('parent_id')}',
+      'parent_id': '${await sharedPref.getString('parent_id')}',
     });
-    print('29: ${response.toString()}');
+    print('line 29 response: ${response.toString()}');
+    print('line 30 parent_id: ${sharedPref.getString('parent_id')}');
     if (response[0]['statues'] == 'success') {
       NotificationApi().showNotification(
           id: 0,

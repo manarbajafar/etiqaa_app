@@ -30,7 +30,8 @@ class ChildUncompleteController extends GetxController {
   String? parent_id;
 
   // final myServerUrl = 'http://192.168.8.102:5000/'; //manar
-  final myServerUrl = 'http://192.168.1.13:5000/'; //maram
+  final myServerUrl = 'http://192.168.8.103:5000/'; //manar modem
+  // final myServerUrl = 'http://192.168.1.13:5000/'; //maram
 
   @override
   void onInit() {
@@ -175,6 +176,7 @@ class ChildUncompleteController extends GetxController {
             body: json.encode(body))
         .then((response) {
       final decoded = json.decode(response.body);
+      print('decoded: ${decoded}');
       label = decoded['label'];
     });
 

@@ -130,8 +130,8 @@ def index():
       msg_id=int(result1[0])
       
 
-    sql = "INSERT INTO whats_app_message (parent_id, child_name, date_time, sender, content, msg_id) VALUES (%s, %s, %s, %s, %s,%s)"
-    val = (parent_id, child_name, date_time, sender, text, msg_id +1)
+    sql = "INSERT INTO whats_app_message (parent_id, child_name, date_time, sender, content, msg_id, isSend) VALUES (%s, %s, %s, %s, %s,%s,%s)"
+    val = (parent_id, child_name, date_time, sender, text, msg_id +1, 0)
     mycursor.execute(sql, val)
 
 
@@ -143,7 +143,9 @@ def index():
  
 
 # url='192.168.8.102' #manar
-url='192.168.1.13' #maram
+
+url='192.168.8.103' #manar modem
+# url='192.168.1.13' #maram
 
 # url='127.0.0.1'
 
