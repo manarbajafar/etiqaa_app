@@ -4,8 +4,10 @@ import 'package:etiqaa/database/linkApi.dart';
 import 'package:etiqaa/main.dart';
 import 'package:etiqaa/widgets/custom_textForm.dart';
 import 'package:etiqaa/widgets/titledAppBar.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../widgets/curvedAppbar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -22,6 +24,28 @@ class _LoginPSc extends State<LoginPSc> {
 
   bool msg = false;
   bool isLoading = false;
+  late var fbm;
+  var userToken;
+
+  @override
+  void initState() {
+    print("###########################");
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final SharedPreferences _prefs = await SharedPreferences.getInstance();
+      if (_prefs.getString('fire_token') == null ||
+          _prefs.getString('fire_token') == '') {
+        fbm = FirebaseMessaging.instance;
+        var token = await fbm.getToken();
+        print(token.toString());
+        await _prefs.setString('fire_token', token.toString());
+        // userToken = token.toString();
+        print('done');
+        // await appdata.set_fire_token(token.toString());
+        // await settoken(token);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,11 +59,18 @@ class _LoginPSc extends State<LoginPSc> {
         setState(() {});
         print("email: ${controller.email.text}");
         print("password : ${controller.password.text}");
-        var response = await _crud.postRequest(linklogin, {
+
+        final SharedPreferences _prefs = await SharedPreferences.getInstance();
+        print(
+            "_prefs.getString('fire_token') : ${_prefs.getString('fire_token')}");
+        var data = {
           "email": controller.email.text,
           "password": controller.password.text,
-        });
-        print("response line 39 : ${response.toString()}");
+          "token": _prefs.getString('fire_token'), 
+        };
+        print(data);
+        var response = await _crud.postRequest(linklogin, data);
+        print("response line 71 : ${response.toString()}");
         isLoading = false;
         setState(() {});
         if (response["status"] == "success") {

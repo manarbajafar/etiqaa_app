@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "124122571620",
+    "project_id": "etiqaa-5a24b",
+    "storage_bucket": "etiqaa-5a24b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:124122571620:android:66928bc7de1882c7455071",
+        "android_client_info": {
+          "package_name": "com.example.etiqaa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "124122571620-23jjekp764f8p3oc44b60al9414tf1b6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZ9_NulaZyM7HkMaLlPo8xQfVh0DHRKPw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "124122571620-23jjekp764f8p3oc44b60al9414tf1b6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

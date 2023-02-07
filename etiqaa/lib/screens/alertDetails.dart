@@ -209,7 +209,7 @@ class AlertDetails extends StatelessWidget {
                                       ),
                                     ),
                                     SizedBox(
-                                      height: 40.h,
+                                      height: 50.h,
                                       width: 100.w,
                                       child: ElevatedButton(
                                         style: ElevatedButton.styleFrom(
@@ -241,7 +241,7 @@ class AlertDetails extends StatelessWidget {
                               children: [
                                 SizedBox(
                                   height: 40.h,
-                                  width: 100.w,
+                                  width: 130.w,
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
                                       // ignore: deprecated_member_use
