@@ -1,30 +1,21 @@
 import 'package:etiqaa/screens/choose_child_Sc.dart';
 import 'package:etiqaa/screens/first_sc.dart';
 import 'package:etiqaa/screens/homepage.dart';
-import 'package:etiqaa/widgets/notificationApi.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:workmanager/workmanager.dart';
-
-import 'screens/Child_uncompleteP_Sc.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import 'screens/Child_uncompleteP_Sc.dart';
 
 late SharedPreferences sharedPref;
-void main() async {
-  late final NotificationApi notification = NotificationApi();
-  // ignore: unused_eleme
-  void initState() {
-    notification.initNotification();
-    Workmanager()
-        .registerPeriodicTask('1', 'P N', frequency: Duration(seconds: 2));
-  }
-
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   sharedPref = await SharedPreferences.getInstance();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 

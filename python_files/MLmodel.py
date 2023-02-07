@@ -1,17 +1,26 @@
-from camel_tools.utils.normalize import normalize_alef_maksura_ar, normalize_teh_marbuta_ar, normalize_alef_ar
-from camel_tools.tokenizers.word import simple_word_tokenize
-from camel_tools.disambig.mle import MLEDisambiguator
-from camel_tools.utils.dediac import dediac_ar
-
+import json
+import os  # used for operating system functionalitie s -method getcwd() returns current working directory of a process-
 import pickle
 import re
 
-import os # used for operating system functionalitie s -method getcwd() returns current working directory of a process-
+
+from camel_tools.disambig.mle import MLEDisambiguator
+from camel_tools.tokenizers.word import simple_word_tokenize
+from camel_tools.utils.dediac import dediac_ar
+from camel_tools.utils.normalize import (normalize_alef_ar,
+                                         normalize_alef_maksura_ar,
+                                         normalize_teh_marbuta_ar)
+
 
 #for API
-from flask import Flask,jsonify,request
+from flask import Flask, jsonify, request
 from flask_cors import CORS
+
+#noti
+import requests
 import json
+serverToken = 'AAAAHOZII2Q:APA91bH97LruGt8WxmkCMeEfwVGhGotxXkH0HbtDo_RgXr_ytAOo-dC0cWtH8nX4KwwxTA_VlVYLvaLdSwc3DIc3xNbUY5mpOoI4_hKuiypkaS1iSerG6P_1kmzvbWibD_LwF5uhVtm6'
+deviceToken = '' #get it from db
 
 #for DB
 import mysql.connector
@@ -23,6 +32,7 @@ mydb = mysql.connector.connect(
   database="etiqaa"
 )
 
+    
 app = Flask(__name__) #intance of our flask application 
 
 
@@ -78,6 +88,22 @@ def relativePath(path):
 
 result = ''
 
+def sendnoti (title , body , token):
+    serverKey = 'AAAAHOZII2Q:APA91bH97LruGt8WxmkCMeEfwVGhGotxXkH0HbtDo_RgXr_ytAOo-dC0cWtH8nX4KwwxTA_VlVYLvaLdSwc3DIc3xNbUY5mpOoI4_hKuiypkaS1iSerG6P_1kmzvbWibD_LwF5uhVtm6';
+    msg = { 'title' :  title ,'body' : body}
+    fields = {
+                        'to' : token, 
+                        'notification'  : msg,
+                        'data' :msg,
+                        'priority' : 'high'
+    }
+    headers = {
+        'Content-Type' : 'application/json',
+        'Authorization': 'key=' + serverKey,
+    }
+    URL = 'https://fcm.googleapis.com/fcm/send'
+    res = requests.post(url= URL , headers= headers , data=json.dumps(fields))
+    print(res.text)
 
 #Route '/' to facilitate get request from our flutter app
 @app.route('/', methods = ['POST'])
@@ -128,22 +154,36 @@ def index():
       msg_id=0
     else:
       msg_id=int(result1[0])
-      
 
-    sql = "INSERT INTO whats_app_message (parent_id, child_name, date_time, sender, content, msg_id) VALUES (%s, %s, %s, %s, %s,%s)"
-    val = (parent_id, child_name, date_time, sender, text, msg_id +1)
+    sql = "INSERT INTO whats_app_message (parent_id, child_name, date_time, sender, content, msg_id, isSend) VALUES (%s, %s, %s, %s, %s,%s,%s)"
+    val = (parent_id, child_name, date_time, sender, text, msg_id +1, 0)
     mycursor.execute(sql, val)
 
-
+    # select token
+    sql_token="SELECT token FROM parent WHERE parent_id = %s"
+    val_token = (parent_id,)
+    print('here')
+    mycursor.execute(sql_token, val_token)
+    result_token=mycursor.fetchone()
+    deviceToken=result_token[0]
+    print('deviceToken:', deviceToken)
     mydb.commit()
+
+    #send notification
+    sendnoti('اتقاء', 'اكتشفنا مشكلة محتملة' , deviceToken) 
+    
+
+      ####################
     # return jsonify({'label' : result})
   ######
   return jsonify({'label' : result}) #returning key-value pair in json format
   
  
 
-# url='192.168.8.102' #manar
-url='192.168.1.13' #maram
+url='192.168.8.102' #manar
+
+# url='192.168.8.103' #manar modem
+# url='192.168.1.13' #maram
 
 # url='127.0.0.1'
 

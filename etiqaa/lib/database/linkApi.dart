@@ -1,13 +1,16 @@
 // const String linkServerName = 'http://10.0.2.2'; //emulator
 // const String linkServerName = "http://192.168.100.16"; //thraa from phone
-// const String linkServerName = "http://192.168.8.102"; //manar form phone
-// // const String linkServerName = "http://172.20.10.3"; //maram wifi
-const String linkServerName = "http://192.168.1.13"; //maram form phone
+const String linkServerName = "http://192.168.8.102"; //manar form phone
+// const String linkServerName = "http://192.168.8.103"; //manar modem
+
+// // // const String linkServerName = "http://172.20.10.3"; //maram wifi
+// const String linkServerName = "http://192.168.1.13"; //maram form phone
 
 // Auth
 const String linkAccountInfo = "$linkServerName/etiqaa_php/accountInfo.php";
 const String linksignup = "$linkServerName/etiqaa_php/signup.php";
 const String linklogin = "$linkServerName/etiqaa_php/login.php";
+const String linklogin_c = "$linkServerName/etiqaa_php/login_c.php";
 const String linkconfrmation = "$linkServerName/etiqaa_php/verfiycode.php";
 const String linkresend = "$linkServerName/etiqaa_php/resend.php";
 const String linkchangepass = "$linkServerName/etiqaa_php/changepassword.php";

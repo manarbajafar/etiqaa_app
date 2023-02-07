@@ -29,8 +29,9 @@ class ChildUncompleteController extends GetxController {
   String? gender;
   String? parent_id;
 
-  // final myServerUrl = 'http://192.168.8.102:5000/'; //manar
-  final myServerUrl = 'http://192.168.1.13:5000/'; //maram
+  final myServerUrl = 'http://192.168.8.102:5000/'; //manar
+  // final myServerUrl = 'http://192.168.8.103:5000/'; //manar modem
+  // final myServerUrl = 'http://192.168.1.13:5000/'; //maram
 
   @override
   void onInit() {
@@ -49,6 +50,7 @@ class ChildUncompleteController extends GetxController {
     final instance = new ChildUncompleteController();
     // HANDLING BACKGROUND NOTIFICATIONS :
     print('GETTING INFO FROM BACKGROUND');
+    print('call back called ');
     print(evt.text); // MESSAGE CONTENT  :
     if (evt.packageName == 'com.whatsapp') {
       print("isActive value is : ${instance.isActive}");
@@ -175,6 +177,7 @@ class ChildUncompleteController extends GetxController {
             body: json.encode(body))
         .then((response) {
       final decoded = json.decode(response.body);
+      print('decoded: ${decoded}');
       label = decoded['label'];
     });
 
@@ -199,7 +202,7 @@ class ChildUncompleteController extends GetxController {
     if (response != null && response["status"] != "fail") {
       backbutton = false;
       isActive = 1;
-      await sharedPref.setInt('isActive', 1);
+      sharedPref.setInt('isActive', 1);
       update();
     } else {
       print("activate fail");

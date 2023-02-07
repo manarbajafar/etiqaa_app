@@ -3,8 +3,10 @@ import 'package:etiqaa/database/crud.dart';
 import 'package:etiqaa/database/linkApi.dart';
 import 'package:etiqaa/main.dart';
 import 'package:etiqaa/widgets/custom_textForm.dart';
+// import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../widgets/curvedAppbar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -23,6 +25,26 @@ class _LoginCSc extends State<LoginCSc> {
 
   bool msg = false;
   bool isLoading = false;
+  // late var fbm;
+
+  // @override
+  // void initState() {
+  //   print("###########################");
+  //   super.initState();
+  //   WidgetsBinding.instance.addPostFrameCallback((_) async {
+  //     final SharedPreferences _prefs = await SharedPreferences.getInstance();
+  //     if (_prefs.getString('fire_token') == null ||
+  //         _prefs.getString('fire_token') == '') {
+  //       fbm = FirebaseMessaging.instance;
+  //       var token = await fbm.getToken();
+  //       print(token.toString());
+  //       await _prefs.setString('fire_token', token.toString());
+  //       print('done');
+  //       // await appdata.set_fire_token(token.toString());
+  //       // await settoken(token);
+  //     }
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +55,7 @@ class _LoginCSc extends State<LoginCSc> {
       if (loginCFormKey.currentState!.validate()) {
         isLoading = true;
         setState(() {});
-        var response = await _crud.postRequest(linklogin, {
+        var response = await _crud.postRequest(linklogin_c, {
           "email": controller.email.text,
           "password": controller.password.text,
         });
