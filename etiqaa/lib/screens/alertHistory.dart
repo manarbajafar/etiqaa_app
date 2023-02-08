@@ -44,7 +44,7 @@ class _AlertHistoryState extends State<AlertHistory> {
     super.initState();
   }
 
-  messages() async {
+  historyMessages() async {
     List<Message> messageList = [];
     var response = await _crud.postRequest2(linkAlertHistory, {
       'parent_id': sharedPref.getString('parent_id'),
@@ -122,7 +122,7 @@ class _AlertHistoryState extends State<AlertHistory> {
           Expanded(
             flex: 1,
             child: FutureBuilder(
-              future: messages(),
+              future: historyMessages(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 List? snap = snapshot.data;
                 if (snapshot.connectionState == ConnectionState.waiting) {
