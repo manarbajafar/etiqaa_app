@@ -31,7 +31,6 @@ Gender getGender(String gender) {
 Crud _crud = Crud();
 
 bool msg = false;
-List<Message> messageList = [];
 
 class AlertHistory extends StatefulWidget {
   @override
@@ -41,14 +40,12 @@ class AlertHistory extends StatefulWidget {
 class _AlertHistoryState extends State<AlertHistory> {
   @override
   void initState() {
-    setState(() {
-      messageList = [];
-    });
+    setState(() {});
     super.initState();
   }
 
   messages() async {
-    messageList.clear();
+    List<Message> messageList = [];
     var response = await _crud.postRequest2(linkAlertHistory, {
       'parent_id': sharedPref.getString('parent_id'),
     });

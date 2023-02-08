@@ -67,7 +67,7 @@ class AlertDetails extends StatelessWidget {
                             if (save) {
                               Get.off(AlertHistory());
                             } else {
-                              Get.off(HomePage());
+                              Get.offAll(HomePage());
                             }
                           },
                         ),
@@ -241,7 +241,7 @@ class AlertDetails extends StatelessWidget {
                               children: [
                                 SizedBox(
                                   height: 40.h,
-                                  width: 130.w,
+                                  width: 150.w,
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
                                       // ignore: deprecated_member_use
@@ -249,8 +249,13 @@ class AlertDetails extends StatelessWidget {
                                     ),
                                     onPressed: () {
                                       deleteMessage();
-
-                                      Get.off(AlertHistory());
+                                      Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                AlertHistory(),
+                                          ));
+                                      // Get.off(AlertHistory());
                                     },
                                     child: Text(
                                       'حذف الرسالة',
@@ -303,5 +308,3 @@ saveMessage() async {
     print("save fail");
   }
 }
-
-List<Message> messageList = [];

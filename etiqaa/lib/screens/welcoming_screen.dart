@@ -27,7 +27,7 @@ class Welcoming extends StatelessWidget {
                 style: Theme.of(context).textTheme.headline1,
               ),
               SizedBox(
-                height: 300.h,
+                height: 350.h,
                 child: Padding(
                   padding:
                       EdgeInsets.symmetric(vertical: 20.h, horizontal: 30.h),
