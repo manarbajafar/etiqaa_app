@@ -13,13 +13,11 @@ import 'package:get/get.dart';
 import '../screens/addChild.dart';
 import '../screens/alertDetails.dart';
 
-
 class MessagesCards extends StatefulWidget {
   @override
   State<MessagesCards> createState() => _MessagesCardsState();
 }
 
-List<Message> messageList = [];
 int index = 0;
 
 class _MessagesCardsState extends State<MessagesCards>
@@ -27,10 +25,8 @@ class _MessagesCardsState extends State<MessagesCards>
   int? childrenNum = sharedPref.getInt('childrenNum');
   void initState() {
     setState(() {
-      messageList.clear();
-      messageList = [];
-
       tablist();
+      messages();
     });
     super.initState();
   }
@@ -50,7 +46,7 @@ class _MessagesCardsState extends State<MessagesCards>
 
   bool msg = false;
   messages() async {
-    messageList = [];
+    List<Message> messageList = [];
     var response = await _crud.postRequest2(linkWhatsAppMessages, {
       'parent_id': sharedPref.getString('parent_id'),
     });
@@ -903,7 +899,7 @@ class _MessagesCardsState extends State<MessagesCards>
                                                                               padding: EdgeInsets.symmetric(
                                                                                 horizontal: 10.w,
                                                                               ),
-                                                                              child: messageList[index].childgender == Gender.Boy ? Image.asset('images/boyIcon_c.png') : Image.asset('images/girlIcon_c.png'),
+                                                                              child: snap[index].childgender == Gender.Boy ? Image.asset('images/boyIcon_c.png') : Image.asset('images/girlIcon_c.png'),
                                                                             ),
                                                                             Padding(
                                                                               padding: EdgeInsets.symmetric(vertical: 2.h),

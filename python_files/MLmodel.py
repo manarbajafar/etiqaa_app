@@ -184,10 +184,10 @@ def index():
   
  
 
-url='192.168.8.102' #manar
+# url='192.168.8.102' #manar
 
 # url='192.168.8.103' #manar modem
-# url='192.168.1.13' #maram
+url='192.168.1.13' #maram
 
 # url='127.0.0.1'
 

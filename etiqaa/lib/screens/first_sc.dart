@@ -48,7 +48,7 @@ class firstSc extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 3.h, horizontal: 3.h),
                 child: Container(
-                  height: 180.h,
+                  height: 260.h,
                   width: 300.w,
                   child: Text(
                     'اتقاء هو تطبيق لمراقبة الرسائل الخاصة للابناء على تطبيق واتساب لاكتشاف الكلمات غير اللائقة باللغة العربية',

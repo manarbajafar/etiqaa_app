@@ -66,7 +66,7 @@ class _HelpCenterState extends State<HelpCenter> {
               borderRadius: BorderRadius.circular(15.r),
               child: SizedBox(
                 height: 60.h,
-                width: 200.w,
+                width: 210.w,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     // ignore: deprecated_member_use
@@ -94,7 +94,7 @@ class _HelpCenterState extends State<HelpCenter> {
               borderRadius: BorderRadius.circular(15.r),
               child: SizedBox(
                 height: 60.h,
-                width: 200.w,
+                width: 210.w,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     // ignore: deprecated_member_use
@@ -122,7 +122,7 @@ class _HelpCenterState extends State<HelpCenter> {
               borderRadius: BorderRadius.circular(15.r),
               child: SizedBox(
                 height: 60.h,
-                width: 200.w,
+                width: 210.w,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     // ignore: deprecated_member_use

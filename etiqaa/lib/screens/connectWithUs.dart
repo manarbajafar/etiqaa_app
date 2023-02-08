@@ -89,7 +89,7 @@ class _ConnectWithUsState extends State<ConnectWithUs> {
                           child: Text(
                             'EtiqaaApp@gmail.com',
                             style: TextStyle(
-                                fontSize: 14.sp, fontWeight: FontWeight.bold),
+                                fontSize: 13.sp, fontWeight: FontWeight.bold),
                           ),
                         ),
                       ),

@@ -1,7 +1,6 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:etiqaa/screens/accountSettings.dart';
-import 'package:etiqaa/screens/adviceDetailsBullying.dart';
-import 'package:etiqaa/screens/adviceDetailsHarassment.dart';
+import 'package:etiqaa/screens/adviceDetails.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -66,7 +65,9 @@ class Advice extends StatelessWidget {
                     backgroundColor: Color.fromRGBO(237, 236, 242, 1),
                   ),
                   onPressed: () {
-                    Get.to(AdviceDetailsBullying());
+                    Get.to(AdviceDetailsBullying(
+                      categry: 'تنمر',
+                    ));
                   },
                   child: Container(
                     color: Color.fromRGBO(237, 236, 242, 1),
@@ -94,7 +95,9 @@ class Advice extends StatelessWidget {
                     backgroundColor: Color.fromRGBO(237, 236, 242, 1),
                   ),
                   onPressed: () {
-                    Get.to(AdviceDetailsHarassment());
+                    Get.to(AdviceDetailsBullying(
+                      categry: 'تحرش',
+                    ));
                   },
                   child: Container(
                     color: Color.fromRGBO(237, 236, 242, 1),
