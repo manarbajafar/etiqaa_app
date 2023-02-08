@@ -88,10 +88,11 @@ def relativePath(path):
 
 result = ''
 
-def sendnoti (title , body , token):
+def sendnoti (title , body , token,data):
     serverKey = 'AAAAHOZII2Q:APA91bH97LruGt8WxmkCMeEfwVGhGotxXkH0HbtDo_RgXr_ytAOo-dC0cWtH8nX4KwwxTA_VlVYLvaLdSwc3DIc3xNbUY5mpOoI4_hKuiypkaS1iSerG6P_1kmzvbWibD_LwF5uhVtm6';
     msg = { 'title' :  title ,'body' : body,'sound': 'default'}
-    data ={}
+   
+    
     fields = {
                         'to' : token, 
                         'notification'  : msg,
@@ -172,7 +173,8 @@ def index():
     mydb.commit()
 
     #send notification
-    sendnoti('اتقاء', 'اكتشفنا مشكلة محتملة لدى ' + child_name , deviceToken) 
+    noti_data={'content':text, 'date_time':date_time, 'sender':sender,'parent_id': parent_id ,'child_name':child_name}
+    sendnoti('اتقاء', 'اكتشفنا مشكلة محتملة لدى ' + child_name , deviceToken, noti_data) 
     
 
       ####################
