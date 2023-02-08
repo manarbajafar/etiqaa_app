@@ -94,7 +94,7 @@ class _AlertHistoryState extends State<AlertHistory> {
           color: Color(0xFFF9AF4B),
           items: [
             Icon(
-              Icons.tips_and_updates_outlined,
+              Icons.tips_and_updates,
               size: 30,
             ),
             Icon(

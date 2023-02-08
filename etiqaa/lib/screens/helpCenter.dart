@@ -31,7 +31,7 @@ class _HelpCenterState extends State<HelpCenter> {
           color: Color(0xFFF9AF4B),
           items: [
             Icon(
-              Icons.tips_and_updates_outlined,
+              Icons.tips_and_updates,
               size: 30.w,
             ),
             Icon(

@@ -24,7 +24,7 @@ class _LoginPSc extends State<LoginPSc> {
 
   bool msg = false;
   bool isLoading = false;
-  late var fbm;
+  late var FCM;
   var userToken;
 
   @override
@@ -35,8 +35,8 @@ class _LoginPSc extends State<LoginPSc> {
       final SharedPreferences _prefs = await SharedPreferences.getInstance();
       if (_prefs.getString('fire_token') == null ||
           _prefs.getString('fire_token') == '') {
-        fbm = FirebaseMessaging.instance;
-        var token = await fbm.getToken();
+        FCM = FirebaseMessaging.instance;
+        var token = await FCM.getToken();
         print(token.toString());
         await _prefs.setString('fire_token', token.toString());
         // userToken = token.toString();
@@ -210,7 +210,7 @@ class _LoginPSc extends State<LoginPSc> {
                             ),
                             onPressed: () {
                               print(
-                                  "sharedPref.getString('parent_id') in line 221 : ${sharedPref.getString('parent_id')}");
+                                  "sharedPref.getString('parent_id') in line 213 : ${sharedPref.getString('parent_id')}");
                               loginp();
                             },
                             child: Text(
