@@ -209,7 +209,7 @@ class AlertDetails extends StatelessWidget {
                                       ),
                                     ),
                                     SizedBox(
-                                      height: 50.h,
+                                      height: 40.h,
                                       width: 100.w,
                                       child: ElevatedButton(
                                         style: ElevatedButton.styleFrom(
