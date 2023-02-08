@@ -20,7 +20,7 @@ class _AdviceDetailsBullyingState extends State<AdviceDetailsBullying>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TitledAppBar(title: 'التعامل مع التنمر الإلكتروني'),
+      appBar: TitledAppBar(title: 'التعامل مع ال${widget.categry} الإلكتروني'),
       body: Align(
         alignment: Alignment.center,
         child: Padding(
