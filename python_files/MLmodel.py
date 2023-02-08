@@ -90,12 +90,14 @@ result = ''
 
 def sendnoti (title , body , token):
     serverKey = 'AAAAHOZII2Q:APA91bH97LruGt8WxmkCMeEfwVGhGotxXkH0HbtDo_RgXr_ytAOo-dC0cWtH8nX4KwwxTA_VlVYLvaLdSwc3DIc3xNbUY5mpOoI4_hKuiypkaS1iSerG6P_1kmzvbWibD_LwF5uhVtm6';
-    msg = { 'title' :  title ,'body' : body}
+    msg = { 'title' :  title ,'body' : body,'sound': 'default'}
+    data ={}
     fields = {
                         'to' : token, 
                         'notification'  : msg,
-                        'data' :msg,
+                        'data' :data,
                         'priority' : 'high'
+                        
     }
     headers = {
         'Content-Type' : 'application/json',
@@ -170,7 +172,7 @@ def index():
     mydb.commit()
 
     #send notification
-    sendnoti('اتقاء', 'اكتشفنا مشكلة محتملة' , deviceToken) 
+    sendnoti('اتقاء', 'اكتشفنا مشكلة محتملة لدى ' + child_name , deviceToken) 
     
 
       ####################

@@ -21,7 +21,7 @@ class accountSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TitledAppBar(),
+      appBar: TitledAppBar(title: 'الإعدادات'),
       bottomNavigationBar: CurvedNavigationBar(
           // type: BottomNavigationBarType.fixed,
           index: 2,
@@ -29,7 +29,7 @@ class accountSettings extends StatelessWidget {
           color: Color(0xFFF9AF4B),
           items: [
             Icon(
-              Icons.tips_and_updates_outlined,
+              Icons.tips_and_updates,
               size: 30.w,
             ),
             Icon(
@@ -59,10 +59,6 @@ class accountSettings extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Text(
-              'الإعدادات',
-              style: Theme.of(context).textTheme.headline1,
-            ),
             ClipRRect(
               borderRadius: BorderRadius.circular(15.r),
               child: SizedBox(

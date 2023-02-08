@@ -13,7 +13,7 @@ class Advice extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TitledAppBar(),
+      appBar: TitledAppBar(title: 'النصائح'),
       bottomNavigationBar: CurvedNavigationBar(
           // type: BottomNavigationBarType.fixed,
           index: 0,
@@ -51,12 +51,8 @@ class Advice extends StatelessWidget {
         alignment: Alignment.center,
         child: Column(
           children: [
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 20.h),
-              child: Text(
-                'النصائح',
-                style: Theme.of(context).textTheme.headline1,
-              ),
+            SizedBox(
+              height: 20.h,
             ),
             ClipRRect(
               borderRadius: BorderRadius.circular(15.r),
