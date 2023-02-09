@@ -41,7 +41,9 @@ Click OK on all the opened windows.
 
 4. run php server
 
-5. run python server by run Mlmodel.py file.
+5. import etiqaa.sql in phpmyadmin
 
-6. run without debugging for main.dart file
+6. run python server by run Mlmodel.py file.
+
+7. run without debugging for main.dart file
 
