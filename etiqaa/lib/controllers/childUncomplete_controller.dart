@@ -169,26 +169,19 @@ class ChildUncompleteController extends GetxController {
       "child_name": name,
     };
     print(json.encode(body));
-    http
-        .post(
-            Uri.parse(
-              url,
-            ),
-            body: json.encode(body))
-        .then((response) {
-      final decoded = json.decode(response.body);
-      print('decoded: ${decoded}');
-      label = decoded['label'];
-    });
+    http.post(
+        Uri.parse(
+          url,
+        ),
+        body: json.encode(body));
+    //     .then((response) {
+    //   final decoded = json.decode(response.body);
+    //   print('decoded: ${decoded}');
+    //   label = decoded['label'];
+    // });
 
     //converting the fetched data from json to key value pair that can be displayed on the screen
     // final decoded = json.decode(response.body) as Map<String, dynamic>;
-
-    //this for tharaa :)
-    if (label == 'NOT_APROP') {
-      //Here take the same msg information (line 134 - 138) and deal with it
-      print("label is $label");
-    }
   }
 
   activateC() async {

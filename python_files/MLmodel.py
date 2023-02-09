@@ -91,12 +91,11 @@ result = ''
 def sendnoti (title , body , token):
     serverKey = 'AAAAHOZII2Q:APA91bH97LruGt8WxmkCMeEfwVGhGotxXkH0HbtDo_RgXr_ytAOo-dC0cWtH8nX4KwwxTA_VlVYLvaLdSwc3DIc3xNbUY5mpOoI4_hKuiypkaS1iSerG6P_1kmzvbWibD_LwF5uhVtm6';
     msg = { 'title' :  title ,'body' : body,'sound': 'default'}
-   
-    
+    data={} #i will send data
     fields = {
                         'to' : token, 
                         'notification'  : msg,
-                        'data' : msg,
+                        'data' : data,
                         'priority' : 'high'
                         
     }
@@ -158,8 +157,8 @@ def index():
     else:
       msg_id=int(result1[0])
 
-    sql = "INSERT INTO whats_app_message (parent_id, child_name, date_time, sender, content, msg_id, isSend) VALUES (%s, %s, %s, %s, %s,%s,%s)"
-    val = (parent_id, child_name, date_time, sender, text, msg_id +1, 0)
+    sql = "INSERT INTO whats_app_message (parent_id, child_name, date_time, sender, content, msg_id) VALUES (%s, %s, %s, %s, %s,%s)"
+    val = (parent_id, child_name, date_time, sender, text, msg_id +1)
     mycursor.execute(sql, val)
 
     # select token
@@ -185,6 +184,8 @@ def index():
  
 
 url='192.168.8.102' #manar
+# url='192.168.43.62' #lama
+
 
 # url='192.168.8.103' #manar modem
 # url='192.168.1.13' #maram
