@@ -1,5 +1,6 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:etiqaa/database/crud.dart';
+import 'package:etiqaa/notificationService.dart';
 import 'package:etiqaa/screens/accountSettings.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -32,13 +33,16 @@ class _HomePageState extends State<HomePage> with Crud {
   }
 
   void _handleMessage(RemoteMessage message) {
-    Get.off(HomePage());
+    setState(() {
+      Get.off(HomePage());
+    });
   }
 
   @override
   void initState() {
     super.initState();
-    setupInteractedMessage();
+
+    // setupInteractedMessage();
     getMessage();
   }
 
@@ -62,16 +66,27 @@ class _HomePageState extends State<HomePage> with Crud {
   var FCM = FirebaseMessaging.instance;
 
   getMessage() {
-    //called 3 times :)
-    FirebaseMessaging.onMessage.listen((alert) {
-      print('--------onMessage-----------');
-      Get.snackbar(
-        alert.notification?.title ?? 'اتقاء',
-        alert.notification?.body ?? 'اكتشفنا مشكلة محتملة',
-        // duration: Duration(seconds: 2),
+    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
+      RemoteNotification notification = event.notification!;
+      AndroidNotification? android = event.notification?.android;
+      NotificationService().showNotification(
+        notification: notification,
+        android: android,
       );
-      // alert.data['ggg'];
+      // If `onMessage` is triggered with a notification, construct our own
+      // local notification to show to users using the created channel.
+      if (android != null) {}
     });
+    // //called 3 times :)
+    // FirebaseMessaging.onMessage.listen((alert) {
+    //   print('--------onMessage-----------');
+    //   Get.snackbar(
+    //     alert.notification?.title ?? 'اتقاء',
+    //     alert.notification?.body ?? 'اكتشفنا مشكلة محتملة',
+    //     // duration: Duration(seconds: 2),
+    //   );
+    //   // alert.data['ggg'];
+    // });
   }
 
   @override
