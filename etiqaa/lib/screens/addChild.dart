@@ -57,8 +57,12 @@ class _addChildState extends State<addChild> with Crud {
 
       if (response != null && response["status"] == "success") {
         setState(() {
-          sharedPref.setInt(
-              'childrenNum', sharedPref.getInt('childrenNum')! + 1);
+          if (sharedPref.getInt('childrenNum') != null) {
+            sharedPref.setInt(
+                'childrenNum', sharedPref.getInt('childrenNum')! + 1);
+          } else {
+            sharedPref.setInt('childrenNum', 1);
+          }
         });
         controller.toConfirmation();
         controller.name.clear();
