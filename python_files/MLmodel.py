@@ -90,7 +90,7 @@ result = ''
 
 def sendnoti (title , body , token):
     serverKey = 'AAAAHOZII2Q:APA91bH97LruGt8WxmkCMeEfwVGhGotxXkH0HbtDo_RgXr_ytAOo-dC0cWtH8nX4KwwxTA_VlVYLvaLdSwc3DIc3xNbUY5mpOoI4_hKuiypkaS1iSerG6P_1kmzvbWibD_LwF5uhVtm6';
-    msg = { 'title' :  title ,'body' : body,'sound': 'default'}
+    msg = { 'title' :  title ,'body' : body,'sound': 'default', "android_channel_id": "high_importance_channel","click_action": "FLUTTER_NOTIFICATION_CLICK",}
     data={} #i will send data
     fields = {
                         'to' : token, 

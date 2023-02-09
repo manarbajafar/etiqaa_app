@@ -34,5 +34,4 @@ const String linkSaveMessage = "$linkServerName/etiqaa_php/saveMessage.php";
 const String linkdeleteMessages =
     "$linkServerName/etiqaa_php/deleteMessage.php";
 const String linkAlertHistory = "$linkServerName/etiqaa_php/alertHistory.php";
-const String linkNotification = "$linkServerName/etiqaa_php/message.php";
 const String linkAdvice = "$linkServerName/etiqaa_php/advice.php";

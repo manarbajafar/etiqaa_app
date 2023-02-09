@@ -30,9 +30,11 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 late SharedPreferences sharedPref;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
   await Firebase.initializeApp(
       //  options: DefaultFirebaseOptions.currentPlatform,
       );
+
   await NotificationService().init();
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();

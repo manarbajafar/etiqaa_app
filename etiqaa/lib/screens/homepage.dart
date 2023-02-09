@@ -33,7 +33,9 @@ class _HomePageState extends State<HomePage> with Crud {
   }
 
   void _handleMessage(RemoteMessage message) {
-    Get.off(HomePage());
+    setState(() {
+      Get.off(HomePage());
+    });
   }
 
   @override
