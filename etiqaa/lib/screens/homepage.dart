@@ -43,7 +43,8 @@ class _HomePageState extends State<HomePage> with Crud {
   }
 
   Widget get isHasChild {
-    if (sharedPref.getInt('childrenNum') == 0) {
+    if (sharedPref.getInt('childrenNum') == 0 ||
+        sharedPref.getInt('childrenNum') == null) {
       return NoChildren();
     } else {
       return MessagesCards();

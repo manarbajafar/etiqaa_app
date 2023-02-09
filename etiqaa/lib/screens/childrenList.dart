@@ -158,7 +158,8 @@ class _ChildrenListState extends State<ChildrenList> {
                   },
                 ),
                 SizedBox(
-                    child: (sharedPref.getInt('childrenNum'))! < 3
+                    child: sharedPref.getInt('childrenNum') == null ||
+                            (sharedPref.getInt('childrenNum'))! < 3
                         ? Container(
                             height: 200.h,
                             width: double.infinity,
