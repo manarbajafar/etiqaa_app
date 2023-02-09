@@ -24,6 +24,8 @@ and put in C:\xampp\htdocs folder
 in Command Prompt run: 
 - pip install camel-tools
 - Pip install flask
+- pip install Flask-Cors
+- C:\Users\Your Name\AppData\Local\Programs\Python\Python36-32\Scripts>python -m pip install mysql-connector-python
 
 
 2. Follow these steps:
