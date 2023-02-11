@@ -95,7 +95,7 @@ class _EditChildAccountState extends State<EditChildAccount> with Crud {
       print(response.toString());
 
       if (response != null && response["statues"] == "success") {
-        controller.toConfirmation(isActive);
+        controller.toConfirmation(isActive, getGender(controller.gender));
       } else {
         print("Edit fail");
       }
@@ -188,9 +188,9 @@ class _EditChildAccountState extends State<EditChildAccount> with Crud {
                             Radio(
                               value: 'boy',
                               groupValue: controller.gender,
-                              onChanged: (val) {
+                              onChanged: (value) {
                                 setState(() {
-                                  controller.gender = val.toString();
+                                  controller.gender = value.toString();
                                 });
                               },
                             ),
@@ -203,9 +203,9 @@ class _EditChildAccountState extends State<EditChildAccount> with Crud {
                             Radio(
                               value: 'girl',
                               groupValue: controller.gender,
-                              onChanged: (val) {
+                              onChanged: (value) {
                                 setState(() {
-                                  controller.gender = val.toString();
+                                  controller.gender = value.toString();
                                 });
                               },
                             ),

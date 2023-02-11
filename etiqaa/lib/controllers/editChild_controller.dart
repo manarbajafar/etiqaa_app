@@ -24,7 +24,7 @@ class EditChildController extends EditChild_controller {
   void onInit() {
     name = TextEditingController();
     date = TextEditingController();
-    gender = '';
+    // gender = '';
     super.onInit();
   }
 
@@ -36,7 +36,7 @@ class EditChildController extends EditChild_controller {
   }
 
   @override
-  toConfirmation(String isActive) {
+  toConfirmation(String isActive, String gender) {
     Get.off(
       ChildAccount(
         name: name.text,
