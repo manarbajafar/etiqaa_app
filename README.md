@@ -37,13 +37,13 @@ Type CAMELTOOLS_DATA in the Variable name input box and path the project from yo
 Click OK on all the opened windows.
 
 3.If you are running the application on a physical mobile, first connect to the same computer network, then go to computer settings, then networks, then Wi-Fi, then the network characteristics that you are connected to, copy the ipv4 address and put it in:
-- etiqaa_app\python_files\MLmodel.py line 106 in the url variable
+- etiqaa_app\python_files\MLmodel.py  in the url variable
 - etiqaa_app\etiqaa\lib\database\linkApi.dart file on line 1 in linkServerName variable
-- etiqaa_app\etiqaa\lib\controllers\childUncomplete_controller.dart line 30
+- etiqaa_app\etiqaa\lib\controllers\childUncomplete_controller.dart in the myServerUrl variable
 
 4. run php server
 
-5. import etiqaa.sql in phpmyadmin
+5. create database with name 'etiqaa' then import etiqaa.sql in phpmyadmin, etiqaa.sql file: (https://drive.google.com/file/d/1959cYrwlRUd091MjJ5CDVsypr-xwh1ke/view?usp=sharing)
 
 6. run python server by run Mlmodel.py file.
 
