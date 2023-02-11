@@ -1,5 +1,6 @@
 # etiqaa_app
 
+Software:
 to run the project:
 
 1. Download requirements
@@ -18,7 +19,7 @@ https://www.python.org/downloads/
 - Flutter (version 3.3.10 was used), Dart (version 2.18.6 was used)
 https://docs.flutter.dev/get-started/install
 
-- php files download from https://github.com/maram46/etiqaa_php
+- php files download from https://github.com/maram46/etiqaa_php (must be replaced with one drive link)
 and put in C:\xampp\htdocs folder
 
 in Command Prompt run: 
@@ -49,3 +50,10 @@ Click OK on all the opened windows.
 
 7. run without debugging for main.dart file
 
+Hardware:
+The system will be compatible with Android devices that have the following attributes:
+•	The device type is a smartphone.
+•	The device runs on android version 6.0.1(Marshmallow) or above. 
+•	The device is connected to the internet.  
+•	The device has a Minimum of 4GB RAM and 32GB storage.
+•	The parent device must support Google Play services.
