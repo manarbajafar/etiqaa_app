@@ -1,6 +1,6 @@
 # etiqaa_app
 
-Software:
+# Software:
 to run the project:
 
 1. Download requirements
@@ -50,7 +50,8 @@ Click OK on all the opened windows.
 
 7. run without debugging for main.dart file
 
-Hardware:
+
+# Hardware:
 The system will be compatible with Android devices that have the following attributes:
 - The device type is a smartphone.
 - The device runs on android version 6.0.1(Marshmallow) or above. 
