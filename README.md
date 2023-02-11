@@ -52,8 +52,8 @@ Click OK on all the opened windows.
 
 Hardware:
 The system will be compatible with Android devices that have the following attributes:
-•	The device type is a smartphone.
-•	The device runs on android version 6.0.1(Marshmallow) or above. 
-•	The device is connected to the internet.  
-•	The device has a Minimum of 4GB RAM and 32GB storage.
-•	The parent device must support Google Play services.
+- The device type is a smartphone.
+- The device runs on android version 6.0.1(Marshmallow) or above. 
+- The device is connected to the internet.  
+- The device has a Minimum of 4GB RAM and 32GB storage.
+- The parent device must support Google Play services.
