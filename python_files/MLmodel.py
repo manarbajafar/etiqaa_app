@@ -91,7 +91,7 @@ result = ''
 def sendnoti (title , body , token):
     serverKey = 'AAAAHOZII2Q:APA91bH97LruGt8WxmkCMeEfwVGhGotxXkH0HbtDo_RgXr_ytAOo-dC0cWtH8nX4KwwxTA_VlVYLvaLdSwc3DIc3xNbUY5mpOoI4_hKuiypkaS1iSerG6P_1kmzvbWibD_LwF5uhVtm6';
     msg = { 'title' :  title ,'body' : body,'sound': 'default', "android_channel_id": "high_importance_channel","click_action": "FLUTTER_NOTIFICATION_CLICK",}
-    data={} #i will send data
+    data={} # send data
     fields = {
                         'to' : token, 
                         'notification'  : msg,
@@ -183,12 +183,12 @@ def index():
   
  
 
-# url='192.168.8.102' #manar
+url='192.168.8.102' #manar
 # url='192.168.43.62' #lama
 
 
 # url='192.168.8.103' #manar modem
-url='192.168.1.13' #maram
+# url='192.168.1.13' #maram
 
 # url='127.0.0.1'
 

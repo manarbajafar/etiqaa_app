@@ -68,6 +68,7 @@ class _HomePageState extends State<HomePage> with Crud {
   getMessage() {
     FirebaseMessaging.onMessage.listen((RemoteMessage event) {
       RemoteNotification notification = event.notification!;
+      print('notification line 71 : ${notification}');
       AndroidNotification? android = event.notification?.android;
       NotificationService().showNotification(
         notification: notification,
